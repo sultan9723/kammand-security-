@@ -169,3 +169,24 @@ Before completing a feature:
 4. Run build
 5. Verify responsive behavior
 6. Verify accessibility
+
+## Branching & Pull Requests
+Feature-driven workflow, one feature per branch and one PR per feature:
+
+1. Always base new feature branches on `develop`:
+   - `git checkout develop`
+   - `git pull origin develop`
+   - `git checkout -b feature/<name>`
+2. Build the feature, run lint/typecheck/test/build.
+3. Commit with a clear conventional message:
+   - `git add <changed paths>` (stage only the feature's files)
+   - `git commit -m "feat/..."`
+4. Push the branch and open a PR against `develop`:
+   - `git push -u origin feature/<name>`
+   - `gh pr create --base develop --head feature/<name> --title "..." --body "..."`
+5. Do NOT merge the PR. The user reviews and merges manually on GitHub.
+6. After the PR is merged, the feature branch is deleted/archived.
+
+Notes:
+- The GitHub CLI (`gh`) is available at `C:\Users\DELL\.github-cli\bin\gh.exe`.
+- `git add --all` is avoided; stage only the intended feature files to keep PRs focused.
