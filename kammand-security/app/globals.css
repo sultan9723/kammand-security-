@@ -7,7 +7,7 @@
   --color-surface-elevated: #fdfeff;
   --color-text: #0b1623;
   --color-text-secondary: #435367;
-  --color-text-muted: #6f7f91;
+  --color-text-muted: #5b6b7e;
   --color-border: rgba(11, 22, 35, 0.12);
   --color-border-strong: rgba(11, 22, 35, 0.22);
 
@@ -5672,8 +5672,8 @@ a.insights-index-entry:focus-visible {
   }
 
   .industries-overview__hero-content .text-body-large {
-    font-size: var(--font-size-body-large);
-    line-height: var(--line-height-body-large);
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-body);
   }
 
   .industries-overview__hero-actions .ui-button {
@@ -6724,7 +6724,7 @@ a.insights-index-entry:focus-visible {
 }
 
 .service-profile__hero-panel-heading strong {
-  font-family: var(--font-family-heading);
+  font-family: var(--font-family-display);
   font-size: var(--font-size-h4);
 }
 

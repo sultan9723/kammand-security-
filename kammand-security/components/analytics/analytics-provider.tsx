@@ -7,7 +7,12 @@ import { analyticsEventTargetName, parseAnalyticsEvent } from "../../lib/analyti
 import { createAnalyticsProvider, type AnalyticsProvider as AnalyticsProviderType } from "../../lib/analytics/provider";
 
 export function AnalyticsProvider() {
-  const providerRef = useRef<AnalyticsProviderType>(createAnalyticsProvider());
+  const providerRef = useRef<AnalyticsProviderType | null>(null);
+
+  if (providerRef.current === null) {
+    providerRef.current = createAnalyticsProvider();
+  }
+
   const [analyticsAllowed, setAnalyticsAllowed] = useState(false);
 
   useEffect(() => {
@@ -29,16 +34,18 @@ export function AnalyticsProvider() {
   useEffect(() => {
     const provider = providerRef.current;
 
-    if (!analyticsAllowed || !provider.enabled) {
-      provider.shutdown();
+    if (!analyticsAllowed || !provider?.enabled) {
+      provider?.shutdown();
       return;
     }
+
+    const activeProvider = provider;
 
     function handleAnalyticsEvent(event: Event) {
       const parsed = parseAnalyticsEvent(event);
 
       if (parsed) {
-        provider.track(parsed);
+        activeProvider.track(parsed);
       }
     }
 

@@ -16,7 +16,7 @@ describe("BookRoute", () => {
     render(<BookRoute />);
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
-    expect(screen.getByRole("heading", { level: 1, name: "Book a consultation." })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 1, name: "Let's turn your priorities into clear next steps." })).toBeTruthy();
     expect(screen.getByText("SCHEDULING NOT CONFIGURED")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Contact KAMMAND" }).getAttribute("href")).toBe(
       "/contact",

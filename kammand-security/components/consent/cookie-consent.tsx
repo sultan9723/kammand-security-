@@ -30,26 +30,35 @@ export function CookieConsent() {
   });
   const dialogRef = useRef<HTMLDivElement>(null);
   const lastActiveElementRef = useRef<HTMLElement | null>(null);
+  const preferencesLoadedRef = useRef(false);
 
-  useEffect(() => {
-    window.requestAnimationFrame(() => {
-      const stored = readStoredConsentPreferences();
-      setPreferences(stored);
-      setShowBanner(!stored);
-      setDraft({
-        functional: Boolean(stored?.functional),
-        analytics: Boolean(stored?.analytics),
-      });
+  const applyStoredPreferences = useCallback(() => {
+    const stored = readStoredConsentPreferences();
+    preferencesLoadedRef.current = true;
+    setPreferences(stored);
+    setShowBanner(!stored);
+    setDraft({
+      functional: Boolean(stored?.functional),
+      analytics: Boolean(stored?.analytics),
     });
   }, []);
 
   useEffect(() => {
+    window.requestAnimationFrame(applyStoredPreferences);
+  }, [applyStoredPreferences]);
+
+  useEffect(() => {
     function handleOpenPreferences() {
       lastActiveElementRef.current = document.activeElement as HTMLElement | null;
-      const current = readStoredConsentPreferences() ?? preferences;
+      const stored = readStoredConsentPreferences();
+
+      if (stored === undefined && !preferencesLoadedRef.current) {
+        applyStoredPreferences();
+      }
+
       setDraft({
-        functional: Boolean(current?.functional),
-        analytics: Boolean(current?.analytics),
+        functional: Boolean(stored?.functional),
+        analytics: Boolean(stored?.analytics),
       });
       setShowPreferences(true);
       setShowBanner(false);
@@ -60,7 +69,7 @@ export function CookieConsent() {
     return () => {
       window.removeEventListener(openConsentPreferencesEventName, handleOpenPreferences);
     };
-  }, [preferences]);
+  }, [applyStoredPreferences]);
 
   const restoreFocus = useCallback(() => {
     window.requestAnimationFrame(() => {
@@ -84,6 +93,29 @@ export function CookieConsent() {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         closePreferences();
+        return;
+      }
+
+      if (event.key !== "Tab" || !dialogRef.current) {
+        return;
+      }
+
+      const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (!firstElement || !lastElement) {
+        return;
+      }
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     }
 

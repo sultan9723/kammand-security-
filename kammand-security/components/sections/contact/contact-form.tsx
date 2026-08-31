@@ -318,17 +318,38 @@ function validateClientPayload(payload: Record<string, FormDataEntryValue>) {
   const workEmail = String(payload.workEmail ?? "").trim();
   const organization = String(payload.organization ?? "").trim();
   const message = String(payload.message ?? "").trim();
+  const jobTitle = String(payload.jobTitle ?? "").trim();
+  const phone = String(payload.phone ?? "").trim();
+  const country = String(payload.country ?? "").trim();
 
   if (fullName.length < 2) {
     errors.fullName = "Enter your full name.";
+  } else if (fullName.length > 120) {
+    errors.fullName = "Keep your name under 120 characters.";
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(workEmail)) {
     errors.workEmail = "Enter a valid work email.";
+  } else if (workEmail.length > 254) {
+    errors.workEmail = "Keep the email under 254 characters.";
   }
 
   if (organization.length < 2) {
     errors.organization = "Enter your company or organization.";
+  } else if (organization.length > 160) {
+    errors.organization = "Keep the organization name under 160 characters.";
+  }
+
+  if (jobTitle.length > 120) {
+    errors.jobTitle = "Keep your job title under 120 characters.";
+  }
+
+  if (phone.length > 40) {
+    errors.phone = "Keep the phone number under 40 characters.";
+  }
+
+  if (country.length > 80) {
+    errors.country = "Keep the country under 80 characters.";
   }
 
   if (message.length < 20) {

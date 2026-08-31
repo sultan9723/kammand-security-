@@ -75,7 +75,7 @@ export function BookPage() {
           <div className="book-overview__hero-grid">
             <div className="book-overview__hero-content">
               <p className="eyebrow">BOOK A CONSULTATION</p>
-              <h1 id="book-title" aria-label="Book a consultation.">Let&apos;s turn your priorities into clear next steps<span>.</span></h1>
+              <h1 id="book-title">Let&apos;s turn your priorities into clear next steps<span>.</span></h1>
               <span className="book-overview__short-rule" aria-hidden="true" />
               <p className="text-body-large">A focused 30-minute conversation with a KAMMAND advisor helps you understand your risks, explore options, and identify what will have the most impact.</p>
               <div className="book-overview__hero-actions" aria-label="Booking page actions">
