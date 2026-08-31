@@ -56,15 +56,35 @@ export const envRegistry: EnvVariable[] = [
   },
 ];
 
-export function getProductionEnvironmentIssues(env = process.env) {
+export type ProductionEnvironmentCheck = {
+  issues: string[];
+  warnings: string[];
+};
+
+export function getProductionEnvironmentChecks(env = process.env): ProductionEnvironmentCheck {
   const issues: string[] = [];
+  const warnings: string[] = [];
 
   if (env.VERCEL_ENV !== "production" && env.NODE_ENV !== "production") {
-    return issues;
+    return { issues, warnings };
   }
 
+  // The site URL is not known until the first production deployment exists, so its
+  // absence must not block a first deploy. It is surfaced as a warning and can be
+  // supplied later (or via the auto-assigned VERCEL_URL) before a custom domain is set.
   if (!env.NEXT_PUBLIC_SITE_URL) {
-    issues.push("NEXT_PUBLIC_SITE_URL must be set to the verified production origin.");
+    warnings.push(
+      "NEXT_PUBLIC_SITE_URL is not set. Canonical metadata, sitemap and robots will omit the absolute origin until a production URL is configured.",
+    );
+  } else {
+    try {
+      const parsed = new URL(env.NEXT_PUBLIC_SITE_URL);
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+        warnings.push("NEXT_PUBLIC_SITE_URL must be an absolute http(s) URL.");
+      }
+    } catch {
+      warnings.push("NEXT_PUBLIC_SITE_URL is not a valid absolute URL.");
+    }
   }
 
   if (env.CONTACT_DELIVERY_PROVIDER !== "resend") {
@@ -81,5 +101,9 @@ export function getProductionEnvironmentIssues(env = process.env) {
     issues.push("CONTACT_RATE_LIMIT_PROVIDER must use a persistent production provider.");
   }
 
-  return issues;
+  return { issues, warnings };
+}
+
+export function getProductionEnvironmentIssues(env = process.env) {
+  return getProductionEnvironmentChecks(env).issues;
 }
