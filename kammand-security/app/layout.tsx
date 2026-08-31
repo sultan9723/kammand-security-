@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { CookieConsent } from "@/components/consent/cookie-consent";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -47,7 +48,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
