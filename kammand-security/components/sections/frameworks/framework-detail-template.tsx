@@ -2,13 +2,13 @@ import Link from "next/link";
 import type { FrameworkDetail } from "../../../lib/frameworks";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 type FrameworkDetailTemplateProps = { framework: FrameworkDetail };
-type FrameworkIconName = "arrow" | "check" | "controls" | "evidence" | "focus" | "relationship" | "scope";
+type FrameworkIconName = "check" | "controls" | "evidence" | "focus" | "relationship" | "scope";
 
 function FrameworkIcon({ name }: { name: FrameworkIconName }) {
-  if (name === "arrow") return <svg viewBox="0 0 32 32"><path d="M5 16h22M20 9l7 7-7 7" /></svg>;
   if (name === "check") return <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" /><path d="m10 16 4 4 8-9" /></svg>;
   if (name === "controls") return <svg viewBox="0 0 32 32"><path d="M4 8h24M4 16h24M4 24h24" /><circle cx="11" cy="8" r="3" /><circle cx="21" cy="16" r="3" /><circle cx="14" cy="24" r="3" /></svg>;
   if (name === "evidence") return <svg viewBox="0 0 32 32"><path d="M8 3h11l6 6v20H8zM19 3v7h6M12 15h9M12 20h9M12 25h6" /></svg>;
@@ -29,8 +29,8 @@ export function FrameworkDetailTemplate({ framework }: FrameworkDetailTemplatePr
               <h1 id="framework-detail-title">{framework.h1}</h1>
               <p className="text-body-large">{framework.context}</p>
               <div className="framework-profile__hero-actions" aria-label={`${framework.title} actions`}>
-                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <span aria-hidden="true">-&gt;</span></Link>
-                <Link className="ui-button ui-button--secondary" href="/frameworks">View All Frameworks <span aria-hidden="true">-&gt;</span></Link>
+                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <DirectionalArrow /></Link>
+                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <DirectionalArrow /></Link>
               </div>
             </div>
             <aside className="framework-profile__hero-panel" aria-label={`${framework.title} implementation themes`}>
@@ -93,7 +93,7 @@ export function FrameworkDetailTemplate({ framework }: FrameworkDetailTemplatePr
             {framework.help.map((service, index) => (
               <Link href={service.href} key={service.href}>
                 <span>{String(index + 1).padStart(2, "0")}</span><FrameworkIcon name="evidence" />
-                <h3>{service.title}</h3><p>{service.description}</p><FrameworkIcon name="arrow" />
+                <h3>{service.title}</h3><p>{service.description}</p><DirectionalArrow />
               </Link>
             ))}
           </div>
@@ -111,7 +111,7 @@ export function FrameworkDetailTemplate({ framework }: FrameworkDetailTemplatePr
             <ul>{framework.relationships.map((related, index) => (
               <li key={related.href}><Link href={related.href}>
                 <span>{String(index + 1).padStart(2, "0")}</span><FrameworkIcon name="relationship" />
-                <div><strong>{related.title}</strong><p>{related.description}</p></div><FrameworkIcon name="arrow" />
+                <div><strong>{related.title}</strong><p>{related.description}</p></div><DirectionalArrow />
               </Link></li>
             ))}</ul>
           </div>
@@ -122,7 +122,7 @@ export function FrameworkDetailTemplate({ framework }: FrameworkDetailTemplatePr
         <Container>
           <div className="framework-profile__section-header"><p className="eyebrow">RELATED SERVICES</p><h2 id="framework-related-services-title">Service paths connected to framework work.</h2></div>
           <div className="framework-profile__related-grid">
-            {framework.relatedServices.map((service, index) => <Link href={service.href} key={service.href}><span>{String(index + 1).padStart(2, "0")}</span><h3>{service.title}</h3><FrameworkIcon name="arrow" /></Link>)}
+            {framework.relatedServices.map((service, index) => <Link href={service.href} key={service.href}><span>{String(index + 1).padStart(2, "0")}</span><h3>{service.title}</h3><DirectionalArrow /></Link>)}
           </div>
         </Container>
       </section>

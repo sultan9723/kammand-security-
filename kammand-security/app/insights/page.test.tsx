@@ -35,6 +35,7 @@ describe("InsightsPage", () => {
     expect(
       screen.queryByText("Why third-party risk needs continuous oversight"),
     ).toBeTruthy();
+    expect(document.querySelectorAll(".insights-index-entry__arrow")).toHaveLength(0);
     expect(document.querySelector('script[type="application/ld+json"]')).toBeNull();
   });
 

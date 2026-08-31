@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DirectionalArrow } from "../ui/directional-arrow";
 import {
   consultationLink,
   directNavigationItems,
@@ -181,12 +182,12 @@ export function DesktopNavigation() {
                   ))}
                 </ul>
                 <Link
-                  className="site-header__dropdown-all"
+                  className="ui-button ui-button--secondary site-header__dropdown-all"
                   href={group.viewAllHref}
                   onClick={closeDropdown}
                 >
                   {group.viewAllLabel}
-                  <span aria-hidden="true">-&gt;</span>
+                  <DirectionalArrow />
                 </Link>
               </div>
             </li>

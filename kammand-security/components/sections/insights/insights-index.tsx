@@ -4,6 +4,7 @@ import type { InsightEntry } from "../../../lib/insights";
 import { formatInsightDate } from "../../../lib/insights";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 type InsightsIndexProps = {
   insights: readonly InsightEntry[];
@@ -31,7 +32,7 @@ export function InsightsIndex({ insights }: InsightsIndexProps) {
             <div className="insights-index-hero__content">
               <p className="eyebrow insights-index-eyebrow">INSIGHTS</p>
               <h1 id="insights-index-title">
-                Insights for a changing risk landscape<span>.</span>
+                Insights for a changing risk landscape.
               </h1>
               <p className="text-body-large">
                 Practical perspectives on governance, cybersecurity, regulation,
@@ -82,7 +83,9 @@ export function InsightsIndex({ insights }: InsightsIndexProps) {
 }
 
 function InsightIndexEntry({ insight, index }: { insight: InsightEntry; index: number }) {
-  const className = "insights-index-entry";
+  const className = `insights-index-entry${
+    insight.draft ? " insights-index-entry--draft" : ""
+  }`;
   const content = (
     <>
       <span className="insights-index-entry__icon" aria-hidden="true">
@@ -100,11 +103,11 @@ function InsightIndexEntry({ insight, index }: { insight: InsightEntry; index: n
             ? formatInsightDate(insight.publishedAt)
             : "Reviewed"}
       </span>
-      <span className="insights-index-entry__arrow" aria-hidden="true">
-        <svg viewBox="0 0 24 24">
-          <path d="M5 12h13M13 7l5 5-5 5" />
-        </svg>
-      </span>
+      {!insight.draft ? (
+        <span className="insights-index-entry__arrow" aria-hidden="true">
+          <DirectionalArrow />
+        </span>
+      ) : null}
     </>
   );
 

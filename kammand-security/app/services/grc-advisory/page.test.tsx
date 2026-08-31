@@ -46,7 +46,7 @@ describe("GrcAdvisoryPage", () => {
 
     [
       ["/book", "Book a Consultation"],
-      ["/services", "View All Services"],
+      ["/services", "Explore Services"],
       ["/frameworks/sama-csf", "SAMA CSF"],
       ["/frameworks/nca-ecc", "NCA ECC"],
       ["/frameworks/pdpl", "Saudi PDPL"],

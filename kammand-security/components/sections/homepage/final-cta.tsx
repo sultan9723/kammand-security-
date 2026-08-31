@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 const consultationOutcomes = [
   {
@@ -167,7 +168,7 @@ type FinalCtaSectionProps = {
 
 export function FinalCtaSection({
   actionsLabel = "Final consultation actions",
-  description = "Use Book a Consultation for a live discussion about an active or near-term advisory need. Use Contact Us if you want to send written context first.",
+  description = "Book a focused consultation about an active or near-term advisory need, or explore KAMMAND's service paths first.",
   eyebrow = "CONSULTATION",
   headingId = "final-cta-title",
   title = "Ready to bring clarity to your GRC program?",
@@ -186,11 +187,10 @@ export function FinalCtaSection({
               <Link className="ui-button ui-button--primary" href="/book">
                 <ActionIcon icon="calendar" />
                 Book a Consultation
-                <span className="final-cta-home__arrow" aria-hidden="true">-&gt;</span>
+                <DirectionalArrow className="final-cta-home__arrow" />
               </Link>
-              <Link className="ui-button ui-button--secondary" href="/contact">
-                <ActionIcon icon="mail" />
-                Contact Us
+              <Link className="ui-button ui-button--secondary" href="/services">
+                Explore Services
               </Link>
             </div>
 

@@ -18,7 +18,7 @@ export const frameworks = [
   {
     key: "pdpl",
     number: "03",
-    label: "SAUDI PDPL",
+    label: "Saudi PDPL",
     href: "/frameworks/pdpl",
     descriptor: "Personal data and privacy governance.",
     icon: "privacy",

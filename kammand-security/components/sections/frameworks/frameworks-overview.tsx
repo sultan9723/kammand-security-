@@ -2,6 +2,7 @@ import Link from "next/link";
 import { frameworkSummaries } from "../../../lib/frameworks";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 const frameworkOrder = [1, 0, 3, 2] as const;
 
@@ -80,11 +81,11 @@ export function FrameworksOverviewPage() {
           <div className="frameworks-overview__hero-grid">
             <div className="frameworks-overview__hero-content">
               <p className="eyebrow">FRAMEWORKS</p>
-              <h1 id="frameworks-overview-title" aria-label="Navigate complex frameworks with greater clarity."><span>Navigate complex </span><span>frameworks with </span><span>greater clarity<i>.</i></span></h1>
+              <h1 id="frameworks-overview-title" aria-label="Navigate complex frameworks with greater clarity."><span>Navigate complex </span><span>frameworks with </span><span>greater clarity.</span></h1>
               <p className="text-body-large">Use this page to understand how requirements overlap, where evidence can be reused, and why official mappings still depend on scope.</p>
               <div className="frameworks-overview__hero-actions" aria-label="Framework overview actions">
-                <Link className="ui-button ui-button--primary" href="#framework-context">Explore Framework Context <span aria-hidden="true">-&gt;</span></Link>
-                <Link className="ui-button ui-button--secondary" href="#framework-approach">View Framework Mapping <span aria-hidden="true">-&gt;</span></Link>
+                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <DirectionalArrow /></Link>
+                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <DirectionalArrow /></Link>
               </div>
             </div>
             <FrameworkMap />

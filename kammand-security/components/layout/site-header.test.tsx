@@ -108,6 +108,14 @@ describe("SiteHeader", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open primary navigation" }));
 
     expect(
+      screen.getAllByRole("button", { name: /Services/ }).every(
+        (button) => button.getAttribute("aria-expanded") === "false",
+      ),
+    ).toBe(true);
+
+    fireEvent.click(screen.getAllByRole("button", { name: /Services/ })[1]);
+
+    expect(
       screen.getAllByRole("button", { name: /Services/ }).some(
         (button) => button.getAttribute("aria-expanded") === "true",
       ),
@@ -212,6 +220,7 @@ describe("SiteHeader", () => {
     });
 
     fireEvent.click(trigger);
+    fireEvent.click(screen.getAllByRole("button", { name: /Services/ })[1]);
     const mobileServicesLink = screen.getAllByRole("link", { name: "View All Services" })[1];
     mobileServicesLink.addEventListener("click", (event) => event.preventDefault(), {
       once: true,

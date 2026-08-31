@@ -34,12 +34,17 @@ describe("CompanyRoute", () => {
       "/industries",
       "/insights",
       "/book",
-      "/contact",
     ].forEach((href) => {
       expect(screen.getAllByRole("link").some((link) => link.getAttribute("href") === href)).toBe(
         true,
       );
     });
+
+    expect(
+      screen.getAllByRole("link", { name: /Explore Services/ }).every(
+        (link) => link.getAttribute("href") === "/services",
+      ),
+    ).toBe(true);
   });
 
   it("defines unique metadata without fabricated company schema", () => {

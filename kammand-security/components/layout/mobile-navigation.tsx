@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { DirectionalArrow } from "../ui/directional-arrow";
 import {
-  consultationLink,
   directNavigationItems,
   navigationDropdowns,
 } from "./navigation-items";
@@ -13,14 +15,15 @@ type MobileGroupKey = (typeof navigationDropdowns)[number]["key"];
 
 export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [openGroup, setOpenGroup] = useState<MobileGroupKey | null>("services");
+  const [openGroup, setOpenGroup] = useState<MobileGroupKey | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const closeMenu = useCallback(({ restoreFocus = true } = {}) => {
     setIsOpen(false);
-    setOpenGroup("services");
+    setOpenGroup(null);
 
     if (restoreFocus) {
       window.requestAnimationFrame(() => triggerRef.current?.focus());
@@ -73,6 +76,31 @@ export function MobileNavigation() {
     };
   }, [closeMenu, isOpen]);
 
+  const isLinkActive = useCallback(
+    (href: string) => {
+      if (!pathname) {
+        return false;
+      }
+      if (href === "/") {
+        return pathname === "/";
+      }
+      return pathname === href || pathname.startsWith(`${href}/`);
+    },
+    [pathname],
+  );
+
+  const isGroupActive = useCallback(
+    (group: (typeof navigationDropdowns)[number]) =>
+      isLinkActive(group.viewAllHref) || group.items.some((item) => isLinkActive(item.href)),
+    [isLinkActive],
+  );
+
+  const openMenu = useCallback(() => {
+    const activeGroup = navigationDropdowns.find((group) => isGroupActive(group));
+    setOpenGroup(activeGroup?.key ?? null);
+    setIsOpen(true);
+  }, [isGroupActive]);
+
   return (
     <div className="site-header__mobile-nav">
       <button
@@ -80,14 +108,19 @@ export function MobileNavigation() {
         aria-expanded={isOpen}
         aria-label="Open primary navigation"
         className="site-header__menu-trigger"
-        onClick={() => setIsOpen(true)}
+        onClick={openMenu}
         ref={triggerRef}
+        title="Open navigation"
         type="button"
       >
-        Menu
+        <span aria-hidden="true" className="site-header__menu-icon">
+          <span />
+          <span />
+          <span />
+        </span>
       </button>
 
-      {isOpen ? (
+      {isOpen ? createPortal(
         <div
           aria-modal="true"
           className="site-header__mobile-panel"
@@ -96,33 +129,49 @@ export function MobileNavigation() {
           role="dialog"
         >
           <div className="site-header__mobile-panel-header">
-            <Link
-              aria-label="KAMMAND home"
-              className="site-header__wordmark"
-              href="/"
-              onClick={() => closeMenu({ restoreFocus: false })}
-            >
-              KAMMAND
-            </Link>
+            <div className="site-header__mobile-panel-brand">
+              <Link
+                aria-label="KAMMAND home"
+                className="site-header__wordmark"
+                href="/"
+                onClick={() => closeMenu({ restoreFocus: false })}
+              >
+                KAMMAND
+              </Link>
+            </div>
             <button
               aria-label="Close primary navigation"
-              className="site-header__menu-trigger"
+              className="site-header__menu-trigger site-header__menu-trigger--close"
               onClick={() => closeMenu()}
               ref={closeButtonRef}
+              title="Close navigation"
               type="button"
             >
-              Close
+              <span aria-hidden="true" className="site-header__menu-icon">
+                <span />
+                <span />
+                <span />
+              </span>
             </button>
           </div>
 
-          <nav aria-label="Mobile primary navigation">
+          <nav aria-label="Mobile primary navigation" className="site-header__mobile-nav-content">
+            <div className="site-header__mobile-intro" aria-hidden="true">
+              <span>Explore KAMMAND</span>
+              <span>GRC / Cybersecurity advisory</span>
+            </div>
             <ul className="site-header__mobile-list">
-              {navigationDropdowns.map((group) => {
+              {navigationDropdowns.map((group, index) => {
                 const groupId = `mobile-nav-${group.key}-panel`;
                 const isGroupOpen = openGroup === group.key;
 
                 return (
-                  <li className="site-header__mobile-group" key={group.key}>
+                  <li
+                    className={`site-header__mobile-group${
+                      isGroupActive(group) ? " site-header__mobile-group--active" : ""
+                    }`}
+                    key={group.key}
+                  >
                     <button
                       aria-controls={groupId}
                       aria-expanded={isGroupOpen}
@@ -130,59 +179,73 @@ export function MobileNavigation() {
                       onClick={() => setOpenGroup(isGroupOpen ? null : group.key)}
                       type="button"
                     >
-                      {group.label}
-                      <span aria-hidden="true">{isGroupOpen ? "-" : "+"}</span>
+                      <span className="site-header__mobile-item-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="site-header__mobile-group-label">{group.label}</span>
+                      <span aria-hidden="true" className="site-header__mobile-disclosure-icon">
+                        <span />
+                        <span />
+                      </span>
                     </button>
+
                     {isGroupOpen ? (
-                      <ul className="site-header__mobile-sublist" id={groupId}>
-                        {group.items.map((item) => (
-                          <li key={item.href}>
+                      <div className="site-header__mobile-sublist-wrap" id={groupId}>
+                        <ul className="site-header__mobile-sublist">
+                          {group.items.map((item) => (
+                            <li key={item.href}>
+                              <Link
+                                aria-current={
+                                  isLinkActive(item.href) ? "page" : undefined
+                                }
+                                className="site-header__mobile-sublink"
+                                href={item.href}
+                                onClick={() => closeMenu({ restoreFocus: false })}
+                              >
+                                {item.label}
+                                <DirectionalArrow className="site-header__mobile-sublink-arrow" />
+                              </Link>
+                            </li>
+                          ))}
+                          <li>
                             <Link
-                              className="site-header__mobile-sublink"
-                              href={item.href}
+                              className="ui-button ui-button--secondary site-header__mobile-view-all"
+                              href={group.viewAllHref}
                               onClick={() => closeMenu({ restoreFocus: false })}
                             >
-                              {item.label}
+                              {group.viewAllLabel}
+                              <DirectionalArrow />
                             </Link>
                           </li>
-                        ))}
-                        <li>
-                          <Link
-                            className="site-header__mobile-sublink site-header__mobile-sublink--all"
-                            href={group.viewAllHref}
-                            onClick={() => closeMenu({ restoreFocus: false })}
-                          >
-                            {group.viewAllLabel}
-                            <span aria-hidden="true">-&gt;</span>
-                          </Link>
-                        </li>
-                      </ul>
+                        </ul>
+                      </div>
                     ) : null}
                   </li>
                 );
               })}
 
-              {directNavigationItems.map((item) => (
+              {directNavigationItems.map((item, index) => (
                 <li key={item.href}>
                   <Link
-                    className="site-header__mobile-link"
+                    aria-current={isLinkActive(item.href) ? "page" : undefined}
+                    className="site-header__mobile-link site-header__mobile-link--direct"
                     href={item.href}
                     onClick={() => closeMenu({ restoreFocus: false })}
                   >
-                    {item.label}
+                    <span className="site-header__mobile-item-number">
+                      {String(navigationDropdowns.length + index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="site-header__mobile-group-label">{item.label}</span>
+                    <span aria-hidden="true" className="site-header__mobile-direct-icon">
+                      <DirectionalArrow />
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
-            <Link
-              className="site-header__mobile-cta"
-              href={consultationLink.href}
-              onClick={() => closeMenu({ restoreFocus: false })}
-            >
-              {consultationLink.label}
-            </Link>
           </nav>
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </div>
   );

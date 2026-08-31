@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState, type FormEvent, type SyntheticEvent } from "react";
 import { trackAnalyticsEvent } from "../../../lib/analytics";
 import { contactInterestOptions } from "../../../lib/leads/config";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 type FormErrors = Record<string, string>;
 
@@ -260,10 +261,11 @@ export function ContactForm() {
           type="submit"
         >
           {submission.status === "submitting" ? "Submitting..." : "Submit Inquiry"}
+          <DirectionalArrow />
         </button>
         <Link className="ui-button ui-button--text" href="/book">
           Book a Consultation
-          <span aria-hidden="true">-&gt;</span>
+          <DirectionalArrow />
         </Link>
       </div>
     </form>

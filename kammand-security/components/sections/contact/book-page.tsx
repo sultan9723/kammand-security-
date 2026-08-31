@@ -3,6 +3,7 @@ import { getCalendlyUrl } from "../../../lib/booking";
 import { CalendlyConsentEmbed } from "../../consent/calendly-consent-embed";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 const conversationSteps = [
   { title: "Share your context", description: "We start by understanding your organization, challenges, and priorities." },
@@ -78,8 +79,8 @@ export function BookPage() {
               <span className="book-overview__short-rule" aria-hidden="true" />
               <p className="text-body-large">A focused 30-minute conversation with a KAMMAND advisor helps you understand your risks, explore options, and identify what will have the most impact.</p>
               <div className="book-overview__hero-actions" aria-label="Booking page actions">
-                <Link className="ui-button ui-button--primary" href="#scheduling">Book a Consultation <span aria-hidden="true">-&gt;</span></Link>
-                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <span aria-hidden="true">-&gt;</span></Link>
+                <Link className="ui-button ui-button--primary" href="#scheduling">Book a Consultation <DirectionalArrow /></Link>
+                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <DirectionalArrow /></Link>
               </div>
             </div>
             <ConsultationGuide />
@@ -122,7 +123,7 @@ export function BookPage() {
               </ul>
               <div className="book-overview__contact-alternative">
                 <p>Need to send information or ask a question first?</p>
-                <Link href="/contact">Use the contact form instead <span aria-hidden="true">-&gt;</span></Link>
+                <Link href="/contact">Use the contact form instead <DirectionalArrow /></Link>
               </div>
             </aside>
             <div className="book-overview__scheduler">
