@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { getProductionEnvironmentIssues } from "./lib/env";
+import { getProductionEnvironmentChecks } from "./lib/env";
 
 const securityHeaders = [
   {
@@ -52,7 +52,15 @@ function assertProductionEnvironment() {
     return;
   }
 
-  const issues = getProductionEnvironmentIssues();
+  const { issues, warnings } = getProductionEnvironmentChecks();
+
+  if (warnings.length > 0) {
+    const warningMessage = [
+      "KAMMAND production environment:",
+      ...warnings.map((warning) => `  - ${warning}`),
+    ].join("\n");
+    console.warn(`[kammand:production-environment]\n${warningMessage}`);
+  }
 
   if (issues.length === 0) {
     return;

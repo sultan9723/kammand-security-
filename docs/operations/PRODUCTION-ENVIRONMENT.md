@@ -27,6 +27,15 @@ Do not commit real secrets. Public variables may be visible in browser-delivered
 - Calendly must use the approved KAMMAND scheduling URL; do not hard-code a personal or temporary URL.
 - Analytics and monitoring remain disabled unless a provider is intentionally approved, implemented, documented, and reflected in privacy/cookie disclosures.
 
+## First-Deploy Fallback for the Site URL
+
+`NEXT_PUBLIC_SITE_URL` is not known until the first production deployment exists, so its absence does **not** block a deployment. The build treats a missing or unparseable site URL as a non-blocking warning; server-only secrets remain required and block the build.
+
+- First deploy may run without `NEXT_PUBLIC_SITE_URL`; canonical metadata, sitemap, and robots will omit the absolute origin until it is set.
+- To establish a canonical immediately, set `NEXT_PUBLIC_SITE_URL` to the auto-assigned Vercel origin (for example `https://<project>.vercel.app`) or to the verified production domain.
+- After adding a custom domain, set `NEXT_PUBLIC_SITE_URL` to that domain and redeploy before public release.
+- Never use this fallback to bypass the required server-only secrets (`CONTACT_RECIPIENT`, `CONTACT_FROM`, `RESEND_API_KEY`, `CONTACT_DELIVERY_PROVIDER`, `CONTACT_RATE_LIMIT_PROVIDER`).
+
 ## Preview Requirements
 
 - Preview deployments should not pollute production analytics, production lead delivery, or production booking workflows unless explicitly configured.
