@@ -19,6 +19,7 @@ export function MobileNavigation() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const focusRestoreRafRef = useRef<number | null>(null);
   const pathname = usePathname();
 
   const closeMenu = useCallback(({ restoreFocus = true } = {}) => {
@@ -26,13 +27,30 @@ export function MobileNavigation() {
     setOpenGroup(null);
 
     if (restoreFocus) {
-      window.requestAnimationFrame(() => triggerRef.current?.focus());
+      focusRestoreRafRef.current = window.requestAnimationFrame(() => {
+        triggerRef.current?.focus();
+        focusRestoreRafRef.current = null;
+      });
     }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (focusRestoreRafRef.current !== null) {
+        window.cancelAnimationFrame(focusRestoreRafRef.current);
+        focusRestoreRafRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
     if (!isOpen) {
       return;
+    }
+
+    if (focusRestoreRafRef.current !== null) {
+      window.cancelAnimationFrame(focusRestoreRafRef.current);
+      focusRestoreRafRef.current = null;
     }
 
     const previousOverflow = document.body.style.overflow;
@@ -122,6 +140,7 @@ export function MobileNavigation() {
 
       {isOpen ? createPortal(
         <div
+          aria-label="Primary navigation"
           aria-modal="true"
           className="site-header__mobile-panel"
           id={menuId}
