@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { formatInsightDate, getPublishedInsights } from "../../../lib/insights";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 const editorialFocusAreas = [
   {
@@ -105,10 +106,7 @@ export function InsightsSection() {
       <Container className="container-wide">
         <div className="insights-section__header">
           <p className="eyebrow insights-section__eyebrow">INSIGHTS</p>
-          <h2 id="insights-title">
-            Perspective for a changing risk landscape
-            <span className="insights-section__title-accent">.</span>
-          </h2>
+          <h2 id="insights-title">Perspective for a changing risk landscape.</h2>
           <p className="text-body-large">
             Practical analysis on cybersecurity governance, regulatory change,
             risk, compliance, and assurance.
@@ -137,7 +135,7 @@ export function InsightsSection() {
                     : "Reviewed"}
                 </span>
                 <span className="insight-entry__arrow" aria-hidden="true">
-                  -&gt;
+                  <DirectionalArrow />
                 </span>
               </Link>
             ))}
@@ -157,7 +155,7 @@ export function InsightsSection() {
               </div>
               <Link className="insights-empty__hub-link" href="/insights">
                 Browse the Insights hub
-                <span aria-hidden="true">-&gt;</span>
+                <DirectionalArrow />
               </Link>
             </div>
 
@@ -181,9 +179,9 @@ export function InsightsSection() {
               ))}
             </ul>
 
-            <Link className="insights-empty__view-all" href="/insights">
+            <Link className="ui-button ui-button--secondary" href="/insights">
               View Insights
-              <span aria-hidden="true">-&gt;</span>
+              <DirectionalArrow />
             </Link>
           </div>
         )}

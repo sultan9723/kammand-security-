@@ -14,7 +14,7 @@ describe("TermsRoute", () => {
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("heading", { level: 1, name: "Terms of Use" })).toBeTruthy();
-    expect(screen.getByText(/No guaranteed outcomes/i)).toBeTruthy();
+    expect(screen.getAllByText(/No guaranteed outcomes/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Governing law, court jurisdiction/i)).toBeTruthy();
   });
 

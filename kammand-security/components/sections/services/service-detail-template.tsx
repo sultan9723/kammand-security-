@@ -2,20 +2,20 @@ import Link from "next/link";
 import { engagementSteps, type ServiceDetail } from "../../../lib/services";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 type ServiceDetailTemplateProps = {
   service: ServiceDetail;
 };
 
-type ServiceIconName = "arrow" | "check" | "document" | "framework" | "people" | "scope";
+type ServiceIconName = "check" | "document" | "framework" | "people" | "scope";
 
 function ServiceIcon({ name }: { name: ServiceIconName }) {
   if (name === "document") return <svg viewBox="0 0 32 32"><path d="M8 3h11l6 6v20H8zM19 3v7h6M12 15h9M12 20h9M12 25h6" /></svg>;
   if (name === "framework") return <svg viewBox="0 0 32 32"><path d="m16 3 12 6-12 6L4 9l12-6Z" /><path d="m4 15 12 6 12-6M4 21l12 6 12-6" /></svg>;
   if (name === "people") return <svg viewBox="0 0 32 32"><circle cx="11" cy="11" r="4" /><circle cx="22" cy="12" r="3" /><path d="M4 27v-3c0-5 3-8 7-8s7 3 7 8v3M19 18c5 0 8 3 8 7v2" /></svg>;
   if (name === "scope") return <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" /><circle cx="16" cy="16" r="5" /><path d="m16 16 11-11M22 5h5v5" /></svg>;
-  if (name === "arrow") return <svg viewBox="0 0 32 32"><path d="M5 16h22M20 9l7 7-7 7" /></svg>;
   return <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" /><path d="m10 16 4 4 8-9" /></svg>;
 }
 
@@ -31,8 +31,8 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
               <h1 id="service-detail-title">{service.h1}</h1>
               <p className="text-body-large">{service.valueProposition}</p>
               <div className="service-profile__hero-actions" aria-label={`${service.title} actions`}>
-                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <span aria-hidden="true">-&gt;</span></Link>
-                <Link className="ui-button ui-button--secondary" href="/services">View All Services <span aria-hidden="true">-&gt;</span></Link>
+                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <DirectionalArrow /></Link>
+                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <DirectionalArrow /></Link>
               </div>
             </div>
             <aside className="service-profile__hero-panel" aria-label={`${service.title} focus areas`}>
@@ -106,7 +106,7 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
             <ul aria-label={`${service.title} frameworks`}>
               {service.frameworks.map((framework, index) => (
                 <li key={framework.href}>
-                  <Link href={framework.href}><span>{String(index + 1).padStart(2, "0")}</span><ServiceIcon name="framework" /><strong>{framework.label}</strong><ServiceIcon name="arrow" /></Link>
+                  <Link href={framework.href}><span>{String(index + 1).padStart(2, "0")}</span><ServiceIcon name="framework" /><strong>{framework.label}</strong><DirectionalArrow /></Link>
                 </li>
               ))}
             </ul>
@@ -145,7 +145,7 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
               <Link href={related.href} key={related.href}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <h3>{related.title}</h3>
-                <ServiceIcon name="arrow" />
+                <DirectionalArrow />
               </Link>
             ))}
           </div>

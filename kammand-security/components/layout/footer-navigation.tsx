@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CookiePreferencesButton } from "../consent/cookie-preferences-button";
+import { DirectionalArrow } from "../ui/directional-arrow";
 
 type FooterGroup = {
   readonly label: string;
@@ -45,14 +46,14 @@ export function FooterNavigation({ groups }: { groups: readonly FooterGroup[] })
                 <li key={link.href}>
                   <Link href={link.href}>
                     {link.label}
-                    <span aria-hidden="true">-&gt;</span>
+                    <DirectionalArrow />
                   </Link>
                 </li>
               ))}
               {group.label === "Legal" ? (
                 <li className="site-footer__preferences-item">
                   <CookiePreferencesButton />
-                  <span aria-hidden="true">-&gt;</span>
+                  <DirectionalArrow />
                 </li>
               ) : null}
             </ul>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { engagementSteps, frameworks, serviceSummaries } from "../../../lib/services";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 const serviceIcons = [
@@ -260,27 +261,22 @@ export function ServicesOverviewPage() {
               <div className="services-overview__hero-content">
                 <div className="services-overview__hero-kicker">
                   <p className="eyebrow">SERVICES</p>
-                  <span aria-hidden="true" />
-                  <i aria-hidden="true" />
-                  <i aria-hidden="true" />
-                  <i aria-hidden="true" />
                 </div>
                 <h1 id="services-overview-title">
                   GRC and cybersecurity services for regulated organizations.
                 </h1>
-                <span className="services-overview__hero-rule" aria-hidden="true" />
                 <p className="text-body-large">
                   Use this page to compare KAMMAND&apos;s advisory paths and choose
                   the workstream that matches your current GRC or security need.
                 </p>
                 <div className="services-overview__hero-actions">
-                  <Link className="ui-button ui-button--primary" href="#service-capabilities">
-                    Explore Services
-                    <span aria-hidden="true">-&gt;</span>
+                  <Link className="ui-button ui-button--primary" href="/book">
+                    Book a Consultation
+                    <DirectionalArrow />
                   </Link>
-                  <Link className="ui-button ui-button--text" href="#how-we-work">
-                    How we work
-                    <span aria-hidden="true">-&gt;</span>
+                  <Link className="ui-button ui-button--secondary" href="#service-capabilities">
+                    Explore Services
+                    <DirectionalArrow />
                   </Link>
                 </div>
               </div>
@@ -316,7 +312,7 @@ export function ServicesOverviewPage() {
                 <span className="services-capabilities__icon">
                   <ServiceIcon icon={serviceIcons[index]} />
                 </span>
-                <span className="services-capabilities__arrow" aria-hidden="true">-&gt;</span>
+                <DirectionalArrow className="services-capabilities__arrow" />
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
               </Link>
@@ -405,7 +401,7 @@ export function ServicesOverviewPage() {
                   <ProcessIcon index={index} />
                 </span>
                 {index < engagementSteps.length - 1 ? (
-                  <span className="services-engagement__arrow" aria-hidden="true">-&gt;</span>
+                  <DirectionalArrow className="services-engagement__arrow" />
                 ) : null}
                 <h3>{step.title}</h3>
                 <p>{step.description}</p>

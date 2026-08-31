@@ -38,28 +38,33 @@ async function deliverWithResend(lead: ContactLead): Promise<LeadDeliveryResult>
     return { ok: false, status: "configuration_error" };
   }
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: [recipient],
-      reply_to: lead.workEmail,
-      subject: "New KAMMAND contact inquiry",
-      text: formatLeadText(lead),
-    }),
-  });
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [recipient],
+        reply_to: lead.workEmail,
+        subject: "New KAMMAND contact inquiry",
+        text: formatLeadText(lead),
+      }),
+      signal: AbortSignal.timeout(10_000),
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return { ok: false, status: "provider_error" };
+    }
+
+    const body = (await response.json().catch(() => ({}))) as { id?: string };
+
+    return { ok: true, provider: "resend", id: body.id };
+  } catch {
     return { ok: false, status: "provider_error" };
   }
-
-  const body = (await response.json().catch(() => ({}))) as { id?: string };
-
-  return { ok: true, provider: "resend", id: body.id };
 }
 
 function formatLeadText(lead: ContactLead) {

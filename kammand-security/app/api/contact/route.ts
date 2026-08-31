@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { contactLimits } from "../../../lib/leads/config";
 import { checkContactRateLimit } from "../../../lib/leads/rate-limit";
 import { submitContactLead } from "../../../lib/leads/submit-lead";
 import { hasOversizedPayload, validateContactPayload } from "../../../lib/leads/validation";
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const rateLimit = checkContactRateLimit(getRateLimitKey(request));
+  const rateLimit = checkContactRateLimit(getClientAddressKey(request));
 
   if (rateLimit.productionFallback) {
     logOperationalEvent("contact_rate_limit_production_fallback");
@@ -40,7 +41,21 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const payload = await request.json().catch(() => undefined);
+  const rawBody = await readBoundedBody(request);
+
+  if (rawBody === null) {
+    return NextResponse.json(
+      {
+        ok: false,
+        errors: {
+          form: "The submitted message is too large.",
+        },
+      },
+      { status: 413 },
+    );
+  }
+
+  const payload = parseJsonBody(rawBody);
   const validation = validateContactPayload(payload);
 
   if (!validation.ok) {
@@ -80,9 +95,39 @@ export async function POST(request: NextRequest) {
   });
 }
 
-function getRateLimitKey(request: NextRequest) {
-  const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+function getClientAddressKey(request: NextRequest) {
   const realIp = request.headers.get("x-real-ip");
+  const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
 
-  return forwardedFor || realIp || "unknown";
+  return normalizeAddressKey(realIp || forwardedFor || "unknown");
+}
+
+function normalizeAddressKey(value: string) {
+  const normalized = value.replace(/[^0-9a-fA-F:._%-]/g, "").slice(0, 64);
+
+  return normalized || "unknown";
+}
+
+async function readBoundedBody(request: NextRequest): Promise<ArrayBuffer | null> {
+  let raw: ArrayBuffer;
+
+  try {
+    raw = await request.arrayBuffer();
+  } catch {
+    return new ArrayBuffer(0);
+  }
+
+  if (raw.byteLength > contactLimits.maxPayloadBytes) {
+    return null;
+  }
+
+  return raw;
+}
+
+function parseJsonBody(raw: ArrayBuffer): unknown {
+  try {
+    return JSON.parse(new TextDecoder().decode(raw));
+  } catch {
+    return undefined;
+  }
 }

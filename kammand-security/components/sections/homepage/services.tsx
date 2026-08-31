@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { riskManagementService, serviceSummaries } from "../../../lib/services";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 import { SectionHeading } from "../../ui/section-heading";
 
 const servicePositions = [
@@ -77,7 +78,7 @@ export function ServicesSection() {
               className="services-section__heading"
               description="From governance strategy to audit readiness, KAMMAND helps regulated organizations turn requirements into practical controls, evidence, and measurable action."
               eyebrow="CAPABILITIES"
-              title="GRC and cybersecurity, built around your risk."
+              title="End-to-end GRC and cybersecurity advisory."
               titleId="services-title"
             />
           </div>
@@ -140,7 +141,7 @@ export function ServicesSection() {
           <aside className="services-detail" aria-labelledby="services-detail-title">
             <div className="services-detail__kicker">
               <span>03 / Risk</span>
-              <span aria-hidden="true">-&gt;</span>
+              <DirectionalArrow />
             </div>
             <div className="services-detail__header">
               <CapabilityIcon index={activeServiceIndex} active />
@@ -170,7 +171,7 @@ export function ServicesSection() {
               href={riskManagementService.href}
             >
               Explore Risk Management
-              <span aria-hidden="true">-&gt;</span>
+              <DirectionalArrow />
             </Link>
           </aside>
         </div>

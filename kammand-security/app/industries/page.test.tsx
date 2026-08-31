@@ -64,8 +64,12 @@ describe("IndustriesPage", () => {
         name: "Structured advisory from discovery to assurance.",
       }),
     ).toBeTruthy();
-    expect(screen.getByRole("link", { name: /Book a Consultation/ }).getAttribute("href"))
-      .toBe("/book");
+    expect(screen.getAllByRole("link", { name: /Book a Consultation/ }).every(
+      (link) => link.getAttribute("href") === "/book",
+    )).toBe(true);
+    expect(screen.getAllByRole("link", { name: /Explore Services/ }).every(
+      (link) => link.getAttribute("href") === "/services",
+    )).toBe(true);
   });
 
   it("defines unique overview metadata", () => {

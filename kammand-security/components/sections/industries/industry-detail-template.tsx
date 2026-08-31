@@ -2,13 +2,13 @@ import Link from "next/link";
 import type { IndustryDetail } from "../../../lib/industries";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 type IndustryDetailTemplateProps = { industry: IndustryDetail };
-type IndustryIconName = "arrow" | "check" | "controls" | "framework" | "people" | "service";
+type IndustryIconName = "check" | "controls" | "framework" | "people" | "service";
 
 function IndustryIcon({ name }: { name: IndustryIconName }) {
-  if (name === "arrow") return <svg viewBox="0 0 32 32"><path d="M5 16h22M20 9l7 7-7 7" /></svg>;
   if (name === "check") return <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" /><path d="m10 16 4 4 8-9" /></svg>;
   if (name === "controls") return <svg viewBox="0 0 32 32"><path d="M4 8h24M4 16h24M4 24h24" /><circle cx="11" cy="8" r="3" /><circle cx="21" cy="16" r="3" /><circle cx="14" cy="24" r="3" /></svg>;
   if (name === "framework") return <svg viewBox="0 0 32 32"><path d="m16 3 12 6-12 6L4 9l12-6Z" /><path d="m4 15 12 6 12-6M4 21l12 6 12-6" /></svg>;
@@ -28,8 +28,8 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
               <h1 id="industry-detail-title">{industry.h1}</h1>
               <p className="text-body-large">{industry.positioning}</p>
               <div className="industry-profile__hero-actions" aria-label={`${industry.title} actions`}>
-                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <span aria-hidden="true">-&gt;</span></Link>
-                <Link className="ui-button ui-button--secondary" href="/industries">View All Industries <span aria-hidden="true">-&gt;</span></Link>
+                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <DirectionalArrow /></Link>
+                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <DirectionalArrow /></Link>
               </div>
             </div>
             <aside className="industry-profile__hero-panel" aria-label={`${industry.title} engagement priorities`}>
@@ -83,7 +83,7 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
             <p>These links reflect likely advisory focus areas for this industry context. They are not presented as a universal package.</p>
           </div>
           <div className="industry-profile__service-grid">
-            {industry.relatedServices.map((service, index) => <Link href={service.href} key={service.href}><span>{String(index + 1).padStart(2, "0")}</span><IndustryIcon name="service" /><h3>{service.title}</h3><IndustryIcon name="arrow" /></Link>)}
+            {industry.relatedServices.map((service, index) => <Link href={service.href} key={service.href}><span>{String(index + 1).padStart(2, "0")}</span><IndustryIcon name="service" /><h3>{service.title}</h3><DirectionalArrow /></Link>)}
           </div>
         </Container>
       </section>
@@ -97,7 +97,7 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
               <p>{industry.frameworkContext}</p>
             </div>
             <ul aria-label={`${industry.title} framework references`}>
-              {industry.frameworks.map((framework, index) => <li key={framework.href}><Link href={framework.href}><span>{String(index + 1).padStart(2, "0")}</span><IndustryIcon name="framework" /><strong>{framework.title}</strong><IndustryIcon name="arrow" /></Link></li>)}
+              {industry.frameworks.map((framework, index) => <li key={framework.href}><Link href={framework.href}><span>{String(index + 1).padStart(2, "0")}</span><IndustryIcon name="framework" /><strong>{framework.title}</strong><DirectionalArrow /></Link></li>)}
             </ul>
           </div>
         </Container>
@@ -115,7 +115,7 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
               <p className="eyebrow">RELATED INDUSTRIES</p>
               <h2 id="industry-related-title">Adjacent operating contexts.</h2>
               <div className="industry-profile__related-grid">
-                {industry.relatedIndustries.map((related, index) => <Link href={related.href} key={related.href}><span>{String(index + 1).padStart(2, "0")}</span><IndustryIcon name="people" /><strong>{related.title}</strong><IndustryIcon name="arrow" /></Link>)}
+                {industry.relatedIndustries.map((related, index) => <Link href={related.href} key={related.href}><span>{String(index + 1).padStart(2, "0")}</span><IndustryIcon name="people" /><strong>{related.title}</strong><DirectionalArrow /></Link>)}
               </div>
             </article>
           </div>

@@ -104,38 +104,16 @@ function ProcessBackground() {
         <pattern id="process-dot-field" width="22" height="22" patternUnits="userSpaceOnUse">
           <circle cx="2" cy="2" r="1.25" />
         </pattern>
-        <radialGradient
-          id="process-dot-fade"
-          cx="0"
-          cy="210"
-          r="240"
-          gradientUnits="userSpaceOnUse"
-        >
+        <radialGradient id="process-dot-fade" cx="0" cy="210" r="240" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="white" stopOpacity="1" />
           <stop offset="0.62" stopColor="white" stopOpacity="0.6" />
           <stop offset="1" stopColor="white" stopOpacity="0" />
         </radialGradient>
-        <mask
-          id="process-dot-mask"
-          x="0"
-          y="100"
-          width="260"
-          height="220"
-          maskUnits="userSpaceOnUse"
-          maskContentUnits="userSpaceOnUse"
-        >
+        <mask id="process-dot-mask" x="0" y="100" width="260" height="220" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
           <rect y="100" width="260" height="220" fill="url(#process-dot-fade)" />
         </mask>
       </defs>
-      <rect
-        className="process-bg__dots"
-        x="0"
-        y="100"
-        width="260"
-        height="220"
-        fill="url(#process-dot-field)"
-        mask="url(#process-dot-mask)"
-      />
+      <rect className="process-bg__dots" x="0" y="100" width="260" height="220" fill="url(#process-dot-field)" mask="url(#process-dot-mask)" />
       <g className="process-bg__rings">
         <circle cx="1440" cy="54" r="64" />
         <circle cx="1440" cy="54" r="84" />
@@ -149,19 +127,16 @@ function ProcessBackground() {
         {Array.from({ length: 82 }, (_, index) => {
           const x = 20 + index * 18;
           const y = 750 + Math.sin(index * 0.42) * 36 + Math.sin(index * 0.15) * 24;
-
           return <circle cx={x} cy={y} key={index} r={index % 5 === 0 ? 2.2 : 1.45} />;
         })}
         {Array.from({ length: 76 }, (_, index) => {
           const x = 42 + index * 19;
           const y = 804 + Math.sin(index * 0.5) * 26;
-
           return <circle cx={x} cy={y} key={`lower-${index}`} r="1.2" />;
         })}
         {Array.from({ length: 70 }, (_, index) => {
           const x = 76 + index * 20;
           const y = 850 + Math.sin(index * 0.38) * 18;
-
           return <circle cx={x} cy={y} key={`base-${index}`} r="1" />;
         })}
       </g>
@@ -223,9 +198,7 @@ export function ProcessSection({
           ) : (
             <h2 aria-label="From uncertainty to assurance." id={headingId}>
               <span>From uncertainty</span>
-              <span>
-                to <span className="process-section__title-accent">assurance.</span>
-              </span>
+              <span>to assurance.</span>
             </h2>
           )}
           <p className="text-body-large">{description}</p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { DirectionalArrow } from "../ui/directional-arrow";
 
 export function FooterNewsletter() {
   const [message, setMessage] = useState("");
@@ -48,7 +49,7 @@ export function FooterNewsletter() {
           type="email"
         />
         <button aria-label="Request KAMMAND updates" type="submit">
-          <span aria-hidden="true">-&gt;</span>
+          <DirectionalArrow />
         </button>
         <p aria-live="polite" className="site-footer__newsletter-status">
           {message}

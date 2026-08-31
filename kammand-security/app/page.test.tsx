@@ -60,8 +60,10 @@ describe("Home", () => {
       ),
     ).toBe(true);
     expect(
-      screen.getByRole("link", { name: "Explore Services" }).getAttribute("href"),
-    ).toBe("/services");
+      screen.getAllByRole("link", { name: "Explore Services" }).every(
+        (link) => link.getAttribute("href") === "/services",
+      ),
+    ).toBe(true);
   });
 
   it("keeps the visualization out of the heading hierarchy", () => {
@@ -106,7 +108,7 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "Multiple frameworks. One control environment.",
+        name: "Multiple Frameworks. One control environment.",
       }),
     ).toBeTruthy();
     expect(screen.getByText("FRAMEWORK INTELLIGENCE")).toBeTruthy();
@@ -137,7 +139,7 @@ describe("Home", () => {
     expect(
       screen
         .getByRole("link", {
-          name: "SAUDI PDPL: Personal data and privacy governance.",
+          name: "Saudi PDPL: Personal data and privacy governance.",
         })
         .getAttribute("href"),
     ).toBe("/frameworks/pdpl");
@@ -189,7 +191,7 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "GRC and cybersecurity, built around your risk.",
+        name: "End-to-end GRC and cybersecurity advisory.",
       }),
     ).toBeTruthy();
     expect(screen.getByText("CAPABILITIES")).toBeTruthy();
@@ -343,7 +345,7 @@ describe("Home", () => {
     ).toBeNull();
   });
 
-  it("renders the final CTA with crawlable consultation and contact links", () => {
+  it("renders the final CTA with the canonical consultation and services links", () => {
     render(<Home />);
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
@@ -355,7 +357,7 @@ describe("Home", () => {
     ).toBeTruthy();
     expect(
       screen.getByText(
-        "Use Book a Consultation for a live discussion about an active or near-term advisory need. Use Contact Us if you want to send written context first.",
+        "Book a focused consultation about an active or near-term advisory need, or explore KAMMAND's service paths first.",
       ),
     ).toBeTruthy();
     expect(
@@ -363,8 +365,10 @@ describe("Home", () => {
         (link) => link.getAttribute("href") === "/book",
       ),
     ).toBe(true);
-    expect(screen.getByRole("link", { name: "Contact Us" }).getAttribute("href")).toBe(
-      "/contact",
-    );
+    expect(
+      screen.getAllByRole("link", { name: "Explore Services" }).some(
+        (link) => link.getAttribute("href") === "/services",
+      ),
+    ).toBe(true);
   });
 });

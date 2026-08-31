@@ -3,6 +3,7 @@ import type { InsightBlock, InsightEntry } from "../../../lib/insights";
 import { formatInsightDate } from "../../../lib/insights";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 type InsightArticleProps = {
   insight: InsightEntry;
@@ -100,7 +101,7 @@ export function InsightArticle({ insight, relatedInsights }: InsightArticleProps
                   {relatedInsights.map((related) => (
                     <Link href={related.href} key={related.href}>
                       {related.title}
-                      <span aria-hidden="true">-&gt;</span>
+                      <DirectionalArrow />
                     </Link>
                   ))}
                 </div>
@@ -120,7 +121,7 @@ export function InsightArticle({ insight, relatedInsights }: InsightArticleProps
                   (link) => (
                     <Link href={link.href} key={link.href}>
                       {link.title}
-                      <span aria-hidden="true">-&gt;</span>
+                      <DirectionalArrow />
                     </Link>
                   ),
                 )}
@@ -145,8 +146,8 @@ export function InsightArticle({ insight, relatedInsights }: InsightArticleProps
               <Link className="ui-button ui-button--primary" href="/book">
                 Book a Consultation
               </Link>
-              <Link className="ui-button ui-button--secondary final-cta__secondary" href="/contact">
-                Contact Us
+              <Link className="ui-button ui-button--secondary final-cta__secondary" href="/services">
+                Explore Services
               </Link>
             </div>
           </div>

@@ -73,18 +73,16 @@ describe("ServicesPage", () => {
       }),
     ).toBeTruthy();
     expect(screen.getByRole("table")).toBeTruthy();
-    expect(screen.getByRole("link", { name: /Explore Services/ }).getAttribute("href"))
-      .toBe("#service-capabilities");
-    expect(screen.getByRole("link", { name: /How we work/ }).getAttribute("href"))
-      .toBe("#how-we-work");
+    expect(screen.getAllByRole("link", { name: /Book a Consultation/ }).every(
+      (link) => link.getAttribute("href") === "/book",
+    )).toBe(true);
+    expect(screen.getAllByRole("link", { name: /Explore Services/ }).some(
+      (link) => link.getAttribute("href") === "#service-capabilities",
+    )).toBe(true);
     const principles = screen.getByRole("list", { name: "KAMMAND service principles" });
     ["Tailored", "Integrated", "Practical", "Trusted"].forEach((principle) => {
       expect(within(principles).getByText(principle)).toBeTruthy();
     });
-    expect(screen.getByRole("link", { name: /Book a Consultation/ }).getAttribute("href"))
-      .toBe("/book");
-    expect(screen.getByRole("link", { name: "Contact Us" }).getAttribute("href"))
-      .toBe("/contact");
   });
 
   it("defines unique metadata and supportable service structured data", () => {

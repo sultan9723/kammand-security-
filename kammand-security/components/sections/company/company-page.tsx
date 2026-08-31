@@ -4,6 +4,7 @@ import { frameworkSummaries } from "../../../lib/frameworks";
 import { engagementSteps, serviceSummaries } from "../../../lib/services";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
+import { DirectionalArrow } from "../../ui/directional-arrow";
 
 const operatingPrinciples = [
   { icon: "target", title: "Clarity", description: "Make complex requirements understandable enough to operate." },
@@ -110,8 +111,8 @@ export function CompanyPage() {
               <h1 id="company-title">Clarity, accountability, and security by design<span>.</span></h1>
               <p className="text-body-large">Use this page to understand how KAMMAND approaches advisory work, what principles guide it, and why the practice is structured the way it is.</p>
               <div className="company-hero__actions" aria-label="Company actions">
-                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <span aria-hidden="true">-&gt;</span></Link>
-                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <span aria-hidden="true">-&gt;</span></Link>
+                <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <DirectionalArrow /></Link>
+                <Link className="ui-button ui-button--secondary" href="/services">Explore Services <DirectionalArrow /></Link>
               </div>
             </div>
             <CompanyCompass />
@@ -166,7 +167,7 @@ export function CompanyPage() {
         <Container className="container-wide">
           <header className="company-section-header">
             <p className="eyebrow">HOW KAMMAND WORKS</p>
-            <h2 id="company-process-title">Structured advisory from discovery to assurance<span>.</span></h2>
+            <h2 id="company-process-title">Structured advisory from discovery to assurance.</h2>
           </header>
           <ol className="company-process__steps" aria-label="KAMMAND engagement approach">
             {engagementSteps.map((step, index) => (
@@ -204,8 +205,8 @@ export function CompanyPage() {
                 {supportContexts.map((context) => <li key={context}><span aria-hidden="true"><CompanyIcon name="check" /></span>{context}</li>)}
               </ul>
               <div className="company-audience__links">
-                <Link href="/industries">Explore industry context <span aria-hidden="true">-&gt;</span></Link>
-                <Link href="/insights">Read KAMMAND insights <span aria-hidden="true">-&gt;</span></Link>
+                <Link href="/industries">Explore industry context <DirectionalArrow /></Link>
+                <Link href="/insights">Read KAMMAND insights <DirectionalArrow /></Link>
               </div>
             </article>
           </div>
@@ -235,8 +236,8 @@ export function CompanyPage() {
               <p>Talk with our team to explore the right starting point for your organization.</p>
             </div>
             <div className="company-connect__actions" aria-label="Company consultation actions">
-              <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <span aria-hidden="true">-&gt;</span></Link>
-              <Link className="ui-button ui-button--secondary" href="/contact">Contact Us <span aria-hidden="true">-&gt;</span></Link>
+              <Link className="ui-button ui-button--primary" href="/book">Book a Consultation <DirectionalArrow /></Link>
+              <Link className="ui-button ui-button--secondary" href="/services">Explore Services <DirectionalArrow /></Link>
             </div>
             <span className="company-connect__dots" aria-hidden="true" />
           </div>
