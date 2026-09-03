@@ -399,6 +399,43 @@ p {
   text-transform: uppercase;
 }
 
+
+/* Section heading primitive.
+   Centred by default: every section that uses it is a full-width band, and the
+   established header treatment on this site (see .process-section__header) is
+   centred. Sections needing a different measure override the title width only. */
+.ui-section-heading {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-5);
+  width: 100%;
+  text-align: center;
+}
+
+.ui-section-heading__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-accent);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-eyebrow);
+  line-height: var(--line-height-label);
+  text-transform: uppercase;
+}
+
+.ui-section-heading__title {
+  max-width: 20ch;
+}
+
+.ui-section-heading__description {
+  max-width: var(--reading-width-narrow);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+}
+
 .ink-section {
   background: var(--color-ink);
   color: var(--color-ink-text);
@@ -901,9 +938,25 @@ p {
   gap: var(--space-4);
 }
 
+/* The headline names the niche in full, so it is far longer than the copy
+   this hero previously carried. Wider measure and a lower ceiling keep it to
+   roughly four lines and hold the CTAs above the fold. */
 .homepage-hero__title {
-  max-width: 12.5ch;
-  font-size: clamp(3.25rem, 10vw, 4.75rem);
+  max-width: 18ch;
+  font-size: clamp(2.5rem, 7vw, 3.75rem);
+}
+
+/* Composes .eyebrow and overrides colour only: the accent is already spoken
+   for by the pill above, and this line must sit under the headline rather
+   than compete with it. */
+.homepage-hero__credential {
+  color: var(--color-text-muted);
+}
+
+.homepage-hero__trust {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
 }
 
 .homepage-hero__copy {
@@ -1591,168 +1644,25 @@ p {
   padding-block: var(--section-spacing);
 }
 
-.services-section__workspace {
-  display: grid;
-  gap: var(--space-10);
-  align-items: center;
-}
-
 .services-section__intro {
-  grid-column: 1 / -1;
   min-width: 0;
 }
 
-.services-section__heading {
-  display: grid;
-  gap: var(--space-6);
-  justify-items: center;
-  width: 100%;
-  text-align: center;
-}
-
+/* Capability titles run long; the primitive's 20ch would break them badly. */
 .services-section__heading .ui-section-heading__title {
   max-width: 22ch;
 }
 
-.services-section__heading .ui-section-heading__description {
-  color: var(--color-text-secondary);
-  max-width: var(--reading-width-narrow);
-}
-
-.services-section__heading .ui-section-heading__eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--color-accent);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-label);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-eyebrow);
-  line-height: var(--line-height-label);
-  text-transform: uppercase;
-}
-
-.services-control {
-  position: relative;
-  width: min(100%, 560px);
-  aspect-ratio: 1;
-  margin-inline: auto;
-}
-
-.services-control__map {
-  position: absolute;
-  inset: 8%;
-  width: 84%;
-  height: 84%;
-  overflow: visible;
-}
-
-.services-control__ring,
-.services-control__axis,
-.services-control__active-path {
-  fill: none;
-  vector-effect: non-scaling-stroke;
-}
-
-.services-control__ring {
-  stroke: var(--color-border);
-  stroke-width: 1;
-}
-
-.services-control__axis {
-  stroke: var(--color-border);
-  stroke-width: 1;
-  stroke-dasharray: 4 8;
-}
-
-.services-control__active-path {
-  stroke: var(--color-accent);
-  stroke-width: 3;
-}
-
-.services-control__marker {
-  fill: var(--color-border-strong);
-}
-
-.services-control__core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: grid;
-  width: 34%;
-  aspect-ratio: 1;
-  place-content: center;
-  border: 1px solid color-mix(in srgb, var(--color-accent) 28%, transparent);
-  border-radius: 50%;
-  background: var(--color-ink);
-  color: var(--color-ink-text);
-  text-align: center;
-  transform: translate(-50%, -50%);
-}
-
-.services-control__core span:first-child {
-  font-family: var(--font-family-mono);
-  font-size: clamp(0.9rem, 2.1vw, 1.25rem);
-  font-weight: 700;
-  letter-spacing: var(--letter-spacing-label);
-  line-height: var(--line-height-label);
-}
-
-.services-control__core span:last-child {
-  color: var(--color-accent);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-label);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-label);
-  line-height: var(--line-height-label);
-  text-transform: uppercase;
-}
-
-.services-control__point {
-  position: absolute;
-  top: var(--point-y);
-  left: var(--point-x);
-  display: grid;
-  width: 88px;
-  justify-items: center;
-  gap: var(--space-2);
-  color: var(--color-text);
-  text-align: center;
-  text-decoration: none;
-  transform: translate(-50%, -50%);
-  transition: color var(--duration-micro) var(--ease-out);
-}
-
-.services-control__point-label {
-  display: grid;
-  gap: var(--space-1);
-  width: 100%;
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-label);
-  font-weight: 700;
-  letter-spacing: var(--letter-spacing-label);
-  line-height: var(--line-height-label);
-  text-transform: uppercase;
-}
-
-.services-control__point-label span {
-  color: var(--color-text-muted);
-}
-
-.services-control__point:hover,
-.services-control__point:focus-visible,
-.services-control__point--active {
-  color: var(--color-accent);
-}
-
+/* Capability mark. A bordered plate rather than a loose glyph, so the icon
+   reads as a control marker instead of decoration. */
 .service-icon {
   display: grid;
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   place-items: center;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: var(--color-bg-subtle);
   color: var(--color-text);
   transition:
     background-color var(--duration-micro) var(--ease-out),
@@ -1761,8 +1671,8 @@ p {
 }
 
 .service-icon svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -1770,212 +1680,150 @@ p {
   stroke-width: 1.7;
 }
 
-.service-icon--active,
-.services-control__point:hover .service-icon,
-.services-control__point:focus-visible .service-icon {
+.service-icon--active {
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: var(--color-surface);
 }
 
-.services-detail {
-  display: grid;
-  gap: var(--space-6);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  padding: var(--space-6);
-}
-
-.services-detail__kicker {
-  display: flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-accent);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-label);
-  font-weight: 700;
-  letter-spacing: var(--letter-spacing-label);
-  line-height: var(--line-height-label);
-  text-transform: uppercase;
-}
-
-.services-detail__header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.services-detail__title {
-  color: var(--color-text);
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-h4);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-heading);
-  line-height: var(--line-height-h3);
-}
-
-.services-detail__summary,
-.services-detail__copy {
-  color: var(--color-text-secondary);
-}
-
-.services-detail__summary {
-  font-size: var(--font-size-body-sm);
-  line-height: var(--line-height-label);
-}
-
-.services-detail__copy {
-  line-height: var(--line-height-body);
-}
-
-.services-detail__divider {
-  height: 1px;
-  background: var(--color-border);
-}
-
-.services-detail__activities {
-  display: grid;
-  gap: var(--space-3);
-}
-
-.services-detail__activities p {
-  color: var(--color-accent);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-label);
-  font-weight: 700;
-  letter-spacing: var(--letter-spacing-label);
-  line-height: var(--line-height-label);
-  text-transform: uppercase;
-}
-
-.services-detail__activities ul {
-  display: grid;
-  gap: var(--space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.services-detail__activities li {
-  position: relative;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-body-sm);
-  line-height: var(--line-height-label);
-  padding-left: var(--space-6);
-}
-
-.services-detail__activities li::before {
-  position: absolute;
-  top: 0.25em;
-  left: 0;
-  display: grid;
-  width: var(--space-4);
-  height: var(--space-4);
-  place-items: center;
-  border-radius: 50%;
-  background: var(--color-accent);
-  color: var(--color-surface);
-  content: "";
-}
-
-.services-detail__activities li::after {
-  position: absolute;
-  top: calc(0.25em + 5px);
-  left: 5px;
-  width: 5px;
-  height: 3px;
-  border-bottom: 1.5px solid currentColor;
-  border-left: 1.5px solid currentColor;
-  color: var(--color-surface);
-  content: "";
-  transform: rotate(-45deg);
-}
-
-.services-detail__cta {
-  width: 100%;
-}
+/* ---- Service cards ----
+   Capability records: a stable index rail, restrained icon mark, and clear
+   destination affordance without turning the section into oversized SaaS tiles. */
 
 .services-rail {
   display: grid;
   grid-template-columns: 1fr;
-  margin-top: var(--space-10);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: clip;
-  background: var(--color-surface);
+  gap: var(--space-4);
+  margin: var(--space-16) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.services-rail > li {
+  min-width: 0;
 }
 
 .service-cell {
+  position: relative;
   display: grid;
-  gap: var(--space-3);
+  min-height: 100%;
+  grid-template-columns: 52px minmax(0, 1fr);
   min-width: 0;
-  justify-items: start;
+  overflow: clip;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text);
-  padding: var(--space-5);
   text-decoration: none;
   transition:
-    background-color var(--duration-micro) var(--ease-out),
-    color var(--duration-micro) var(--ease-out);
+    border-color var(--duration-standard) var(--ease-out),
+    background-color var(--duration-standard) var(--ease-out);
+  /* Reveal uses `translate`, not `transform`, so the filled animation state
+     does not out-rank the hover lift below. */
   animation: service-cell-reveal var(--duration-reveal) var(--ease-out)
     calc(var(--service-index) * 55ms) both;
 }
 
+/* Engaging a card resolves the index rail as the active control path. */
+.service-cell::before {
+  content: "";
+  position: absolute;
+  top: var(--space-5);
+  bottom: var(--space-5);
+  left: 0;
+  width: 3px;
+  background: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform var(--duration-standard) var(--ease-out);
+}
+
 .service-cell:hover,
 .service-cell:focus-visible {
-  background: var(--color-bg-subtle);
-}
-
-.service-cell:not(:last-child) {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.service-cell__icon-wrap .service-icon {
-  width: 48px;
-  height: 48px;
+  border-color: var(--color-border-strong);
   background: var(--color-surface-elevated);
+}
+
+.service-cell:hover::before,
+.service-cell:focus-visible::before {
+  transform: scaleY(1);
+}
+
+.service-cell:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.service-cell__content {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: var(--space-6);
+  padding: var(--space-5);
+}
+
+.service-cell__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .service-cell:hover .service-icon,
 .service-cell:focus-visible .service-icon {
   border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
-.service-cell__meta {
-  display: grid;
-  gap: var(--space-1);
+  background: var(--color-accent);
+  color: var(--color-surface);
 }
 
 .service-cell__number {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
   color: var(--color-text-muted);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-label);
   font-weight: 600;
   letter-spacing: var(--letter-spacing-label);
   line-height: var(--line-height-label);
+  padding-top: var(--space-5);
+  transition:
+    background-color var(--duration-standard) var(--ease-out),
+    border-color var(--duration-standard) var(--ease-out),
+    color var(--duration-standard) var(--ease-out);
+}
+
+.service-cell:hover .service-cell__number,
+.service-cell:focus-visible .service-cell__number {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+
+.service-cell__meta {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
 }
 
 .service-cell__title {
   color: var(--color-text);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-label);
-  font-weight: 700;
-  letter-spacing: var(--letter-spacing-label);
-  line-height: var(--line-height-label);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h4);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: var(--line-height-h3);
   max-width: none;
-  text-transform: uppercase;
   transition: color var(--duration-micro) var(--ease-out);
 }
 
 .service-cell__description {
   color: var(--color-text-secondary);
   font-size: var(--font-size-body-sm);
-  line-height: var(--line-height-label);
-  max-width: 32ch;
+  line-height: var(--line-height-body);
+  max-width: var(--reading-width-narrow);
 }
 
 .service-cell:hover .service-cell__title,
@@ -1983,15 +1831,44 @@ p {
   color: var(--color-accent);
 }
 
+.service-cell__action {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-label);
+  text-transform: uppercase;
+  transition: color var(--duration-micro) var(--ease-out);
+}
+
+.service-cell:hover .service-cell__action,
+.service-cell:focus-visible .service-cell__action {
+  color: var(--color-accent);
+}
+
+.service-cell__action .ui-directional-arrow {
+  transition: transform var(--duration-micro) var(--ease-out);
+}
+
+.service-cell:hover .service-cell__action .ui-directional-arrow,
+.service-cell:focus-visible .service-cell__action .ui-directional-arrow {
+  transform: translateX(4px);
+}
+
 @keyframes service-cell-reveal {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    translate: 0 8px;
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    translate: 0 0;
   }
 }
 
@@ -10033,33 +9910,17 @@ a.insights-index-entry:focus-visible {
     min-height: 0;
   }
 
-  .services-section__workspace {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.76fr);
-    gap: var(--space-8);
-  }
-
-  .services-section__intro {
-    grid-column: 1 / -1;
-  }
-
-  .services-control__point {
-    width: 128px;
-  }
-
   .services-rail {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
   }
 
   .service-cell {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+
+  .service-cell__content {
     padding: var(--space-6);
-  }
-
-  .service-cell:nth-child(odd) {
-    border-right: 1px solid var(--color-border);
-  }
-
-  .service-cell:nth-child(n + 5) {
-    border-bottom: 0;
   }
 
   .process-steps {
@@ -10441,48 +10302,19 @@ a.insights-index-entry:focus-visible {
     transform: translateX(-50%);
   }
 
-  .services-section__workspace {
-    grid-template-columns: minmax(360px, 1fr) minmax(300px, 0.85fr);
-    gap: var(--space-10);
-  }
-
-  .services-section__intro {
-    grid-column: 1 / -1;
-  }
-
-  .services-detail {
-    align-self: stretch;
-    align-content: center;
-    padding: var(--space-8);
-  }
-
   .services-rail {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    margin-top: var(--space-12);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin: var(--space-20) 0 0;
   }
 
   .service-cell {
-    border-right: 1px solid var(--color-border);
-    border-bottom: 0;
-    justify-items: center;
-    padding: var(--space-5);
-    text-align: center;
+    grid-template-columns: 60px minmax(0, 1fr);
   }
 
-  .service-cell:nth-child(odd) {
-    border-right: 1px solid var(--color-border);
-  }
-
-  .service-cell:nth-child(3n) {
-    border-right: 1px solid var(--color-border);
-  }
-
-  .service-cell:last-child {
-    border-right: 0;
-  }
-
-  .service-cell:nth-child(n + 4) {
-    border-bottom: 0;
+  .service-cell__content {
+    gap: var(--space-8);
+    padding: var(--space-8);
   }
 
   .process-steps {
@@ -10700,7 +10532,16 @@ a.insights-index-entry:focus-visible {
   .service-cell {
     animation: none;
     opacity: 1;
+    translate: none;
+  }
+
+  .service-cell:hover,
+  .service-cell:focus-visible {
     transform: none;
+  }
+
+  .service-cell::before {
+    transition: none;
   }
 
   .process-steps::before,

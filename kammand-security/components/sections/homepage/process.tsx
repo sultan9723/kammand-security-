@@ -1,5 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
+import { deliverablesByPhase } from "../../../lib/engagement";
 import { Container } from "../../ui/container";
+import sectionStyles from "./homepage-sections.module.css";
 
 const processSteps = [
   {
@@ -222,6 +224,13 @@ export function ProcessSection({
                 <div className="process-step__content">
                   <h3>{step.title}</h3>
                   <p>{step.description}</p>
+                  <ul className={sectionStyles.deliverables}>
+                    {(deliverablesByPhase[step.title] ?? []).map((deliverable) => (
+                      <li className={sectionStyles.deliverable} key={deliverable}>
+                        {deliverable}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </li>
             ))}
