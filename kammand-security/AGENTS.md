@@ -72,6 +72,43 @@ All reusable UI belongs in:
 
 Do not duplicate component logic.
 
+## Repository Layout
+
+The application is `kammand-security/`. Nothing outside it ships.
+
+```
+kammand-security/     the Next.js app — all shipping code
+docs/specs/           numbered, authoritative specifications
+docs/audits/          point-in-time findings, not authoritative
+docs/operations/      release, rollback, environment runbooks
+.github/workflows/    CI: lint, typecheck, test, build
+```
+
+Never recreate `components/` or `lib/` at the repository root. Those paths
+exist only inside `kammand-security/`, and a duplicate at the root makes it
+ambiguous which tree is real.
+
+Inside the app:
+
+```
+app/                  routes, route handlers, metadata
+components/ui/        primitives with no domain knowledge
+components/layout/    header, footer, navigation
+components/sections/  page sections, grouped by the page that owns them
+lib/                  logic, data access, integrations
+content/              authored data (entries, copy tables)
+public/images/        image assets
+```
+
+`lib/` uses a folder per domain once that domain has more than one module or
+its own tests (`lib/leads/`, `lib/consent/`, `lib/analytics/`). A domain with a
+single module stays a single file (`lib/booking.ts`, `lib/services.ts`).
+Promote a file to a folder when you add its second module — do not pre-create
+empty folders.
+
+`content/` holds authored data. `lib/` holds the logic that reads it. Keep
+that boundary: a content file must not import from `lib/`.
+
 ## Responsive Design
 Every feature must support:
 - Mobile
@@ -102,6 +139,31 @@ Requirements:
 - reduced-motion support
 - meaningful alt text for informative images
 - decorative visuals hidden from assistive technology where appropriate
+
+## Images And Static Assets
+
+Every image lives under `public/images/<area>/<descriptive-name>.<ext>`, where
+`<area>` matches the section that uses it (`company`, `insights`, `industries`).
+Nothing else belongs at the root of `public/`.
+
+Format:
+
+- Photographs and renders: WebP. Convert before committing; do not commit PNG
+  or JPEG sources for photographic content.
+- Diagrams, icons, and logos: SVG, with the artwork optimized and any editor
+  metadata stripped.
+- PNG only when the asset genuinely needs lossless pixels.
+
+A committed raster image should be well under 200 KB. If it is larger, it has
+not been converted. `next.config.ts` configures AVIF and WebP derivatives, so
+Next re-encodes on delivery — that is not a reason to commit a heavy source.
+
+Render with `next/image`, never a bare `<img>`. Always pass `sizes` alongside
+`fill`, and reserve `priority` for an image above the fold.
+
+Alt text follows the accessibility rules in this document: describe the
+meaning for informative images, and pass an empty `alt` for decorative ones so
+assistive technology skips them.
 
 ## Motion
 Motion must communicate state, meaning, GRC relationships, framework mapping, or attention priority.
@@ -162,13 +224,35 @@ Target:
 - SEO >= 95
 
 ## Development
-Before completing a feature:
-1. Run lint
-2. Run typecheck when configured
-3. Run tests when configured
-4. Run build
-5. Verify responsive behavior
-6. Verify accessibility
+Before completing a feature, run from `kammand-security/`:
+
+```
+npm run lint && npm run typecheck && npm run test && npm run build
+```
+
+Then verify responsive behavior and accessibility.
+
+Report what actually ran. A failing or skipped gate is stated plainly with its
+output, never smoothed over.
+
+### Tests
+
+Tests sit beside the code they cover, named `<module>.test.ts` or
+`<component>.test.tsx`. Match the source filename exactly — `next.config.ts` is
+covered by `next.config.test.ts`.
+
+`vitest.config.mts` sets `node` as the default environment. A test that renders
+React opts in on its first line:
+
+```ts
+// @vitest-environment jsdom
+```
+
+The environment split does not follow directory boundaries, so this docblock is
+the source of truth rather than a glob. Keep it on the first line.
+
+There is no end-to-end suite. Do not add a `test:e2e` script without also
+adding a working Playwright configuration and at least one passing spec.
 
 ## Branching & Pull Requests
 Feature-driven workflow, one feature per branch and one PR per feature:
