@@ -1,18 +1,9 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { riskManagementService, serviceSummaries } from "../../../lib/services";
+import { serviceSummaries } from "../../../lib/services";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
 import { SectionHeading } from "../../ui/section-heading";
-
-const servicePositions = [
-  { x: "50%", y: "4%" },
-  { x: "88%", y: "28%" },
-  { x: "88%", y: "72%" },
-  { x: "50%", y: "96%" },
-  { x: "12%", y: "72%" },
-  { x: "12%", y: "28%" },
-] as const;
 
 function CapabilityIcon({
   index,
@@ -57,7 +48,12 @@ function CapabilityIcon({
           </>
         ) : (
           <>
-            <path d="M16 4.5 26 8v7.8c0 6.5-4 10.2-10 12-6-1.8-10-5.5-10-12V8z" />
+            <path d="M7 8.5h18" />
+            <path d="M7 16h18" />
+            <path d="M7 23.5h18" />
+            <circle cx="11" cy="8.5" r="2.5" />
+            <circle cx="21" cy="16" r="2.5" />
+            <circle cx="15" cy="23.5" r="2.5" />
             <path d="m11.5 16 3.2 3.2 6.3-7" />
           </>
         )}
@@ -67,141 +63,54 @@ function CapabilityIcon({
 }
 
 export function ServicesSection() {
-  const activeServiceIndex = 2;
-
   return (
     <section className="services-section" aria-labelledby="services-title">
       <Container>
-        <div className="services-section__workspace">
-          <div className="services-section__intro">
-            <SectionHeading
-              className="services-section__heading"
-              description="From governance strategy to audit readiness, KAMMAND helps regulated organizations turn requirements into practical controls, evidence, and measurable action."
-              eyebrow="CAPABILITIES"
-              title="End-to-end GRC and cybersecurity advisory."
-              titleId="services-title"
-            />
-          </div>
-
-          <div
-            className="services-control"
-            role="img"
-            aria-label="KAMMAND services connected through one control system"
-          >
-            <svg
-              className="services-control__map"
-              viewBox="0 0 560 560"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <circle className="services-control__ring" cx="280" cy="280" r="170" />
-              <circle className="services-control__ring" cx="280" cy="280" r="132" />
-              <circle className="services-control__ring" cx="280" cy="280" r="96" />
-              <path className="services-control__axis" d="M280 86v388" />
-              <path className="services-control__axis" d="M86 280h388" />
-              <path className="services-control__axis" d="M143 143l274 274" />
-              <path className="services-control__axis" d="M417 143 143 417" />
-              <path className="services-control__active-path" d="M280 280 407 407" />
-              <circle className="services-control__marker" cx="280" cy="86" r="4" />
-              <circle className="services-control__marker" cx="445" cy="182" r="4" />
-              <circle className="services-control__marker" cx="407" cy="407" r="4" />
-              <circle className="services-control__marker" cx="280" cy="474" r="4" />
-              <circle className="services-control__marker" cx="153" cy="407" r="4" />
-              <circle className="services-control__marker" cx="115" cy="182" r="4" />
-            </svg>
-            <div className="services-control__core">
-              <span>KAMMAND</span>
-              <span>Control System</span>
-            </div>
-
-            {serviceSummaries.map((service, index) => (
-              <Link
-                className={`services-control__point${
-                  index === activeServiceIndex ? " services-control__point--active" : ""
-                }`}
-                href={service.href}
-                key={service.href}
-                style={
-                  {
-                    "--point-x": servicePositions[index].x,
-                    "--point-y": servicePositions[index].y,
-                    "--service-index": index,
-                  } as CSSProperties
-                }
-              >
-                <CapabilityIcon index={index} active={index === activeServiceIndex} />
-                <span className="services-control__point-label">
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  {service.title}
-                </span>
-              </Link>
-            ))}
-          </div>
-
-          <aside className="services-detail" aria-labelledby="services-detail-title">
-            <div className="services-detail__kicker">
-              <span>03 / Risk</span>
-              <DirectionalArrow />
-            </div>
-            <div className="services-detail__header">
-              <CapabilityIcon index={activeServiceIndex} active />
-              <div>
-                <p className="services-detail__title" id="services-detail-title">
-                  Risk Management
-                </p>
-                <p className="services-detail__summary">
-                  Identify. Assess. Prioritize. Treat.
-                </p>
-              </div>
-            </div>
-            <p className="services-detail__copy">
-              {riskManagementService.valueProposition}
-            </p>
-            <div className="services-detail__divider" aria-hidden="true" />
-            <div className="services-detail__activities">
-              <p>Key activities</p>
-              <ul>
-                {riskManagementService.activities.slice(0, 4).map((activity) => (
-                  <li key={activity}>{activity}</li>
-                ))}
-              </ul>
-            </div>
-            <Link
-              className="ui-button ui-button--primary services-detail__cta"
-              href={riskManagementService.href}
-            >
-              Explore Risk Management
-              <DirectionalArrow />
-            </Link>
-          </aside>
+        <div className="services-section__intro">
+          <SectionHeading
+            className="services-section__heading"
+            description="From governance strategy to audit readiness, KAMMAND helps regulated organizations turn requirements into practical controls, evidence, and measurable action."
+            eyebrow="CAPABILITIES"
+            title="End-to-end GRC and cybersecurity advisory."
+            titleId="services-title"
+          />
         </div>
 
-        <div
+        <ul
           className="services-rail"
           aria-label="All KAMMAND service capabilities"
         >
           {serviceSummaries.map((service, index) => (
-            <Link
-              className="service-cell"
-              href={service.href}
-              key={service.href}
-              style={{ "--service-index": index } as CSSProperties}
-            >
-              <span className="service-cell__icon-wrap">
-                <CapabilityIcon index={index} />
-              </span>
-              <div className="service-cell__meta">
+            <li key={service.href}>
+              <Link
+                className="service-cell"
+                href={service.href}
+                style={{ "--service-index": index } as CSSProperties}
+              >
                 <span className="service-cell__number">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <h3 className="service-cell__title">{service.title}</h3>
-              </div>
-              <span className="service-cell__description">
-                {service.description}
-              </span>
-            </Link>
+                <div className="service-cell__content">
+                  <div className="service-cell__head">
+                    <span className="service-cell__icon-wrap">
+                      <CapabilityIcon index={index} />
+                    </span>
+                    <span className="service-cell__action">
+                      Explore service
+                      <DirectionalArrow />
+                    </span>
+                  </div>
+                  <div className="service-cell__meta">
+                    <h3 className="service-cell__title">{service.title}</h3>
+                    <p className="service-cell__description">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </Container>
     </section>
   );

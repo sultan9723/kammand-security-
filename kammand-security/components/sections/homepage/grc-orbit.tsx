@@ -1,14 +1,26 @@
 import type { CSSProperties } from "react";
 
+/**
+ * The operating states KAMMAND works through, read clockwise from the top.
+ *
+ * These are deliberately KAMMAND's own vocabulary rather than NIST CSF's
+ * (Identify / Protect / Detect / Respond / Recover), which this site does not
+ * advise on. The cycle maps to the four frameworks it does cover — SAMA CSF,
+ * NCA ECC, Saudi PDPL, ISO 27001 — and to the language used everywhere else on
+ * the site: governance, risk, control, evidence, remediation, assurance.
+ *
+ * Coordinates are authored, not computed, so the labels can be changed freely
+ * but a position cannot be moved without redrawing its neighbours.
+ */
 const orbitNodes = [
   { label: "GOVERN", x: 260, y: 82, tone: "primary" },
-  { label: "IDENTIFY", x: 386, y: 134, tone: "secondary" },
-  { label: "PROTECT", x: 438, y: 260, tone: "primary" },
-  { label: "DETECT", x: 386, y: 386, tone: "secondary" },
-  { label: "RESPOND", x: 260, y: 438, tone: "primary" },
-  { label: "RECOVER", x: 134, y: 386, tone: "secondary" },
-  { label: "COMPLY", x: 82, y: 260, tone: "primary" },
-  { label: "ASSURE", x: 134, y: 134, tone: "secondary" },
+  { label: "ASSESS", x: 386, y: 134, tone: "secondary" },
+  { label: "CONTROL", x: 438, y: 260, tone: "primary" },
+  { label: "REMEDIATE", x: 386, y: 386, tone: "secondary" },
+  { label: "EVIDENCE", x: 260, y: 438, tone: "primary" },
+  { label: "COMPLY", x: 134, y: 386, tone: "secondary" },
+  { label: "ASSURE", x: 82, y: 260, tone: "primary" },
+  { label: "REPORT", x: 134, y: 134, tone: "secondary" },
 ] as const;
 
 function labelAnchor(x: number) {
@@ -59,8 +71,8 @@ export function GrcOrbit() {
         <title id="grc-orbit-title">KAMMAND governance, risk, and compliance orbit</title>
         <desc id="grc-orbit-desc">
           KAMMAND sits at the center of an organized operating model connecting
-          governance, identification, protection, detection, response, recovery,
-          compliance, and assurance.
+          governance, assessment, control design, remediation, evidence,
+          compliance, assurance, and reporting.
         </desc>
 
         <g className="grc-orbit__guides" aria-hidden="true">

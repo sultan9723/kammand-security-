@@ -1,26 +1,11 @@
 import Image from "next/image";
+import { operatingPrinciples, supportContexts } from "../../../lib/company";
 import Link from "next/link";
 import { frameworkSummaries } from "../../../lib/frameworks";
 import { engagementSteps, serviceSummaries } from "../../../lib/services";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
-
-const operatingPrinciples = [
-  { icon: "target", title: "Clarity", description: "Make complex requirements understandable enough to operate." },
-  { icon: "person", title: "Accountability", description: "Connect controls, risks, and remediation activity to ownership." },
-  { icon: "gear", title: "Practicality", description: "Design governance routines organizations can actually run." },
-  { icon: "document", title: "Evidence", description: "Build confidence through reliable evidence and reviewable records." },
-  { icon: "shield", title: "Assurance", description: "Look beyond documentation toward whether controls work." },
-  { icon: "continuity", title: "Continuity", description: "Treat GRC as an operating capability, not a one-time project." },
-] as const;
-
-const supportContexts = [
-  "Regulated organizations managing cyber risk, evidence, and assurance pressure",
-  "Leadership teams that need clearer ownership across governance, risk, compliance, and security",
-  "Organizations preparing for audit, regulatory review, certification activity, or management assurance",
-  "Teams that need practical structures rather than documentation for its own sake",
-] as const;
 
 const storyHighlights = [
   { icon: "building", label: "Advisory-first approach" },
@@ -130,7 +115,7 @@ export function CompanyPage() {
               <p>We work with regulated and high-accountability organizations to connect obligations to clearer ownership, practical controls, management-ready evidence, and sustainable assurance routines.</p>
             </div>
             <div className="company-story__visual">
-              <Image alt="Curved modern architecture representing clarity and structured progress" fill priority sizes="(min-width: 1024px) 58vw, 100vw" src="/images/company/story-architecture.png" />
+              <Image alt="Curved modern architecture representing clarity and structured progress" fill priority sizes="(min-width: 1024px) 58vw, 100vw" src="/images/company/story-architecture.webp" />
               <div className="company-story__highlights">
                 {storyHighlights.map((highlight) => (
                   <div key={highlight.label}>

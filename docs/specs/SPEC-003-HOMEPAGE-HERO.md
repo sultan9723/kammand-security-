@@ -2,7 +2,7 @@
 
 Status: Approved for implementation
 Project: KAMMAND Security
-Version: 1.0
+Version: 1.1
 Depends on:
 - SPEC-001 - KAMMAND Design System
 - SPEC-002 - Global Header and Navigation
@@ -21,6 +21,9 @@ The hero must communicate within approximately five seconds:
 The hero must feel precise, credible, premium, institutional, modern, technically sophisticated, and calm.
 
 ## 2. Approved Hero Content
+
+> Superseded by the amendment in section 14. The copy below is the original
+> v1.0 content, kept for history.
 
 Eyebrow:
 
@@ -74,6 +77,8 @@ Mobile:
 Use generous whitespace. Do not overcrowd the hero.
 
 ## 4. Signature GRC Visual
+
+> The operating states listed in this section are superseded by section 14.
 
 Build a custom SVG-based orbital/control visualization.
 
@@ -246,3 +251,121 @@ SPEC-003 is complete only when:
 - typecheck passes
 - tests pass
 - production build passes
+
+## 14. Amendment v1.1 - Niche repositioning
+
+Supersedes section 2 in full, and the operating-state list in section 4.
+Everything else in this spec - layout, motion, reduced motion, responsive
+targets, semantics, performance, component architecture - stands unchanged.
+
+### 14.1 Why
+
+The v1.0 hero sold a category rather than a practice. `Navigate regulation.
+Control risk. Stay audit-ready.` over `Strategic GRC and cybersecurity advisory
+for regulated organizations across the GCC.` describes most GRC firms in the
+Gulf. Nothing above the fold named SAMA, fintech, or payments.
+
+Section 1 requires the hero to communicate in about five seconds that KAMMAND
+serves regulated organizations. It did - but only in the broadest sense, which
+left the visitor unable to tell whether the practice was for them.
+
+### 14.2 Approved hero content
+
+Eyebrow (unchanged):
+
+`Where Precision Meets Protection`
+
+H1:
+
+`SAMA compliance and cybersecurity assurance for GCC fintechs and payment companies.`
+
+Supporting copy:
+
+`Controls, evidence, and assurance that hold up under regulatory scrutiny.`
+
+Credibility line:
+
+`Led by an ISO 27001 Lead Auditor · SAMA CSF & CRFR specialist advisory`
+
+Primary CTA:
+
+`Book a SAMA Readiness Consultation` -> `/book`
+
+Secondary CTA (unchanged):
+
+`Explore Services` -> `/services`
+
+Positioning line:
+
+`Built for organizations under SAMA, NCA, and PDPL supervision.`
+
+The credibility line composes the existing `.eyebrow` primitive and overrides
+colour only. It must remain visually subordinate to both the eyebrow pill and
+the H1. It is not a heading and must not be marked up as one.
+
+### 14.3 Content-claim basis
+
+Section 2 of v1.0 barred presenting framework names as certifications,
+endorsements, or partnerships. That still holds. Two new claims were introduced
+here, and both were confirmed factual by the business owner before being
+written:
+
+- **ISO 27001 Lead Auditor** is a credential genuinely held. It is stated as a
+  fact about the practice's leadership, not as an accreditation of KAMMAND as
+  an entity.
+- **The positioning line makes no customer claim.** An earlier draft read
+  "Trusted by regulated fintechs across Saudi Arabia and the GCC", which would
+  have been a customer claim while `lib/proof.ts` and `lib/team.ts` are
+  deliberately empty. It was replaced with a statement of who the practice is
+  built for, which is true today and stays true until real engagements can be
+  cited.
+
+Neither line may be broadened without evidence. `app/page.test.tsx` pins both
+strings so they cannot drift silently.
+
+### 14.4 Operating states
+
+Section 4 listed Govern, Identify, Protect, Detect, Respond, Recover, Comply,
+Assure - five of which are NIST CSF's function names. NIST CSF is not one of
+the four frameworks this site advises on, so the diagram was speaking a
+vocabulary the rest of the site does not use.
+
+The eight states, read clockwise from the top:
+
+- Govern
+- Assess
+- Control
+- Remediate
+- Evidence
+- Comply
+- Assure
+- Report
+
+These are the terms used across the rest of the site, and match AGENTS.md's
+stated KAMMAND visual language: risk, control, governance, evidence, audit,
+remediation, compliance.
+
+The count stays at eight. Node coordinates, tone alternation, ring geometry,
+connector draw, and the staggered reveal are all unchanged - this was a label
+swap only. The SVG `<title>` is unchanged; the `<desc>` was updated because it
+enumerated the old terms.
+
+### 14.5 Known gaps
+
+- **CRFR has no framework page.** The hero names it while `/frameworks/` covers
+  only SAMA CSF, NCA ECC, Saudi PDPL, and ISO 27001. Every other framework
+  reference on the site is one click from a page that backs it. A CRFR page
+  should follow.
+- **`lib/team.ts` is still empty** while the hero now asserts an ISO 27001 Lead
+  Auditor. Populating it would render the Team section and put the credential
+  behind a named practitioner.
+- **`.homepage-hero` line 903 uses `var(--space-14)`, which is not defined.**
+  The declaration is invalid, so the hero's top padding computes to `0`. Found
+  during this work, left unfixed as out of scope; the scale jumps `--space-12`
+  to `--space-16`.
+
+### 14.6 Scope
+
+Hero only. The site header, final-CTA section, footer, and `siteConfig` each
+hold their own independent `Book a Consultation` string and were deliberately
+not touched. The site header still reads `Book a Consultation`.

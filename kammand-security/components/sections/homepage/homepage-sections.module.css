@@ -1,0 +1,549 @@
+/* Shared layout primitives for homepage sections built as CSS Modules.
+   Tokens only — nothing here defines a value app/globals.css already owns. */
+
+.section {
+  padding-block: var(--space-30);
+  background: var(--color-bg);
+}
+
+.sectionSubtle {
+  composes: section;
+  background: var(--color-bg-subtle);
+}
+
+.sectionInk {
+  composes: section;
+  background: var(--color-ink);
+  color: var(--color-ink-text);
+}
+
+.intro {
+  margin-bottom: var(--space-16);
+  margin-inline: auto;
+}
+
+/* ---- Card grid ---- */
+
+.grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-8);
+  min-height: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-standard) var(--ease-out),
+    transform var(--duration-standard) var(--ease-out);
+}
+
+a.card:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-3px);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.number {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-accent);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h3);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-text);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+}
+
+/* ---- Trust strip: continuously scrolling framework badges ---- */
+
+.trustStrip {
+  padding-block: var(--space-10);
+  background: var(--color-surface);
+  border-block: 1px solid var(--color-border);
+}
+
+.marquee {
+  overflow: hidden;
+  /* Fade the badges out at both edges so they enter and leave rather than
+     being clipped mid-shape. */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+}
+
+/* Two identical groups sit side by side; shifting by half the track width
+   lands the second group exactly where the first began. */
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee:hover .marqueeTrack,
+.marqueeTrack:focus-within {
+  animation-play-state: paused;
+}
+
+.badgeGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  margin: 0;
+  padding-inline: var(--space-8);
+  list-style: none;
+}
+
+.badgeItem {
+  flex-shrink: 0;
+}
+
+.badge {
+  display: block;
+  border-radius: var(--radius-md);
+}
+
+a.badge:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.badgeImage {
+  display: block;
+  width: auto;
+  height: 56px;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .badgeImage {
+    height: 68px;
+  }
+}
+
+/* ---- Industries: sector dossier cards ----
+   A filed record rather than a tile: a narrow index spine on the left carrying
+   the record mark and number, the sector on the right. Engaging the card fills
+   the spine with the accent, so the whole record registers as the target. */
+
+.industryGrid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .industryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .industryGrid {
+    gap: var(--space-5);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.industryCard {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  min-height: 100%;
+  overflow: clip;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-standard) var(--ease-out),
+    box-shadow var(--duration-standard) var(--ease-out),
+    transform var(--duration-standard) var(--ease-out);
+}
+
+.industryCard:hover,
+.industryCard:focus-visible {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-3px);
+}
+
+.industryCard:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.industrySpine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-6);
+  background: var(--color-bg-subtle);
+  border-right: 1px solid var(--color-border);
+  transition:
+    background-color var(--duration-standard) var(--ease-out),
+    border-color var(--duration-standard) var(--ease-out);
+}
+
+.industryCard:hover .industrySpine,
+.industryCard:focus-visible .industrySpine {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.industryMark {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--duration-standard) var(--ease-out);
+}
+
+.industryCard:hover .industryMark,
+.industryCard:focus-visible .industryMark {
+  background: var(--color-surface);
+}
+
+.industryIndex {
+  writing-mode: vertical-rl;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-label);
+  color: var(--color-text-muted);
+  transition: color var(--duration-standard) var(--ease-out);
+}
+
+.industryCard:hover .industryIndex,
+.industryCard:focus-visible .industryIndex {
+  color: var(--color-surface);
+}
+
+.industryBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.industryTitle {
+  margin: 0;
+  max-width: none;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h3);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-text);
+  transition: color var(--duration-micro) var(--ease-out);
+}
+
+.industryCard:hover .industryTitle,
+.industryCard:focus-visible .industryTitle {
+  color: var(--color-accent);
+}
+
+.industryDescription {
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+}
+
+.industryAction {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color var(--duration-micro) var(--ease-out);
+}
+
+.industryCard:hover .industryAction,
+.industryCard:focus-visible .industryAction {
+  color: var(--color-accent);
+}
+
+.industryAction :global(.ui-directional-arrow) {
+  transition: transform var(--duration-micro) var(--ease-out);
+}
+
+.industryCard:hover .industryAction :global(.ui-directional-arrow),
+.industryCard:focus-visible .industryAction :global(.ui-directional-arrow) {
+  transform: translateX(4px);
+}
+
+/* ---- Engagement model: phase -> what you receive ---- */
+
+.phaseList {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .phaseList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .phaseList {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.deliverables {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.deliverable {
+  position: relative;
+  padding-left: var(--space-5);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+}
+
+.deliverable::before {
+  content: "";
+  position: absolute;
+  top: 0.6em;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+}
+
+/* ---- FAQ ---- */
+
+.faqList {
+  display: grid;
+  gap: var(--space-3);
+  max-width: var(--reading-width);
+  margin-inline: auto;
+}
+
+.faqItem {
+  padding: var(--space-6) var(--space-8);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.faqItem[open] {
+  border-color: var(--color-border-strong);
+}
+
+.faqQuestion {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h3);
+  color: var(--color-text);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faqQuestion::-webkit-details-marker {
+  display: none;
+}
+
+.faqQuestion:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.faqMarker {
+  flex-shrink: 0;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-body-lg);
+  color: var(--color-accent);
+}
+
+.faqItem[open] .faqMarker {
+  transform: rotate(45deg);
+}
+
+.faqAnswer {
+  margin: var(--space-4) 0 0;
+  max-width: var(--reading-width);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+}
+
+.faqLink {
+  display: inline-block;
+  margin-top: var(--space-3);
+  font-size: var(--font-size-body-sm);
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.faqLink:hover {
+  text-decoration: underline;
+}
+
+.faqLink:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ---- Team ---- */
+
+.credentials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.credential {
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-pill);
+}
+
+.role {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-accent);
+}
+
+/* ---- Proof ---- */
+
+.proofMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* Without motion every repeat is pure duplication. Keep the one labelled
+     set and drop the rest, so the strip reads as a single static row. */
+  .marqueeTrack > [aria-hidden="true"],
+  .badgeItemDecorative {
+    display: none;
+  }
+
+  .badgeGroup {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-10);
+  }
+
+  .card,
+  .industryCard,
+  .industrySpine,
+  .industryMark,
+  .industryIndex,
+  .industryTitle,
+  .industryAction,
+  .industryAction :global(.ui-directional-arrow) {
+    transition: none;
+  }
+
+  a.card:hover,
+  .industryCard:hover,
+  .industryCard:focus-visible,
+  .industryCard:hover .industryAction :global(.ui-directional-arrow),
+  .industryCard:focus-visible .industryAction :global(.ui-directional-arrow) {
+    transform: none;
+  }
+
+  .faqItem[open] .faqMarker {
+    transform: none;
+  }
+}

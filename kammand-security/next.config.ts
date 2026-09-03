@@ -80,6 +80,16 @@ function assertProductionEnvironment() {
 }
 
 const nextConfig: NextConfig = {
+  images: {
+    // Serve modern formats regardless of the source file's format.
+    // AVIF first, WebP as the fallback for older browsers.
+    formats: ["image/avif", "image/webp"],
+    // Widths Next may generate for `fill` and responsive `sizes`.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Cache derivatives for a year; filenames are content-addressed.
+    minimumCacheTTL: 31_536_000,
+  },
   async headers() {
     return [
       {

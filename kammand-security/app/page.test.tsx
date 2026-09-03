@@ -5,6 +5,12 @@ import { join } from "node:path";
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import Home from "./page";
+import { operatingPrinciples } from "../lib/company";
+import { homepageFaqs } from "../lib/faq";
+import { engagementOutcomes } from "../lib/proof";
+import { teamMembers } from "../lib/team";
+import { frameworkBadges } from "../lib/framework-badges";
+import { industrySummaries } from "../lib/industries";
 
 afterEach(() => {
   cleanup();
@@ -18,14 +24,29 @@ describe("Home", () => {
 
     expect(headings).toHaveLength(1);
     expect(headings[0].textContent).toBe(
-      "Navigate regulation. Control risk. Stay audit-ready.",
+      "SAMA compliance and cybersecurity assurance for GCC fintechs and payment companies.",
     );
     expect(
       screen.getByText(
-        "Strategic GRC and cybersecurity advisory for regulated organizations across the GCC.",
+        "Controls, evidence, and assurance that hold up under regulatory scrutiny.",
       ),
     ).toBeTruthy();
     expect(screen.getByText("Where Precision Meets Protection")).toBeTruthy();
+
+    // Both lines below are factual claims — a held credential, and a statement
+    // of who the practice is built for rather than who it has served. Pinned
+    // so neither drifts into a fabricated certification or customer claim
+    // unnoticed. See AGENTS.md.
+    expect(
+      screen.getByText(
+        "Led by an ISO 27001 Lead Auditor · SAMA CSF & CRFR specialist advisory",
+      ),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "Built for organizations under SAMA, NCA, and PDPL supervision.",
+      ),
+    ).toBeTruthy();
   });
 
   it("renders supportable homepage structured data", () => {
@@ -54,10 +75,13 @@ describe("Home", () => {
   it("renders crawlable hero CTAs", () => {
     render(<Home />);
 
+    // Matched on the hero CTA name exactly. The final-CTA section also links
+    // "Book a Consultation" to /book, so a looser assertion would keep passing
+    // while no longer testing the hero at all.
     expect(
-      screen.getAllByRole("link", { name: "Book a Consultation" }).some(
-        (link) => link.getAttribute("href") === "/book",
-      ),
+      screen
+        .getAllByRole("link", { name: "Book a SAMA Readiness Consultation" })
+        .some((link) => link.getAttribute("href") === "/book"),
     ).toBe(true);
     expect(
       screen.getAllByRole("link", { name: "Explore Services" }).every(
@@ -77,13 +101,13 @@ describe("Home", () => {
     ).toBeTruthy();
     [
       "GOVERN",
-      "IDENTIFY",
-      "PROTECT",
-      "DETECT",
-      "RESPOND",
-      "RECOVER",
+      "ASSESS",
+      "CONTROL",
+      "REMEDIATE",
+      "EVIDENCE",
       "COMPLY",
       "ASSURE",
+      "REPORT",
     ].forEach((label) => {
       expect(screen.getByText(label, { selector: ".grc-orbit__label" })).toBeTruthy();
     });
@@ -320,29 +344,148 @@ describe("Home", () => {
     expect(css).toContain("transform: none");
   });
 
-  it("renders the insights section without exposing draft article fixtures", () => {
+  it("renders the industries section linking every industry page", () => {
     render(<Home />);
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "Perspective for a changing risk landscape.",
+        name: "Built for regulated sectors.",
       }),
     ).toBeTruthy();
-    expect(screen.getByText("INSIGHTS")).toBeTruthy();
-    expect(screen.getByText("EDITORIAL REVIEW IN PROGRESS")).toBeTruthy();
-    expect(
-      screen.getByRole("link", { name: /View Insights/ }).getAttribute("href"),
-    ).toBe("/insights");
+    expect(screen.getByText("INDUSTRIES")).toBeTruthy();
+
+    [
+      { name: "Financial Services", href: "/industries/financial-services" },
+      { name: "Fintech & Payments", href: "/industries/fintech-payments" },
+      { name: "Insurance", href: "/industries/insurance" },
+      { name: "Technology", href: "/industries/technology" },
+      { name: "Healthcare", href: "/industries/healthcare" },
+      {
+        name: "Critical & Regulated Enterprises",
+        href: "/industries/regulated-enterprises",
+      },
+    ].forEach((industry) => {
+      expect(
+        screen.getByRole("heading", { level: 3, name: industry.name }),
+      ).toBeTruthy();
+      expect(
+        screen
+          .getAllByRole("link")
+          .some((link) => link.getAttribute("href") === industry.href),
+      ).toBe(true);
+    });
+  });
+
+  it("keeps unpublished placeholder content off the homepage", () => {
+    render(<Home />);
+
+    // Insights left the homepage while every entry was still unpublished.
+    // A regulated buyer reads "in review" as a firm that is not yet operating.
+    [
+      "EDITORIAL REVIEW IN PROGRESS",
+      "PUBLICATION PENDING",
+      "IN REVIEW",
+      "Editorial topic under review.",
+    ].forEach((placeholder) => {
+      expect(screen.queryByText(placeholder)).toBeNull();
+    });
+  });
+
+  it("renders the framework badge strip without sectors", () => {
+    render(<Home />);
 
     expect(
-      screen.queryByText("Understanding overlapping cybersecurity frameworks"),
-    ).toBeNull();
-    expect(screen.queryByText("Building evidence before the audit begins")).toBeNull();
+      screen.getByRole("heading", { name: "Frameworks KAMMAND advises on" }),
+    ).toBeTruthy();
+
+    // Three badges, each linked to the framework page that explains the scope.
+    frameworkBadges.forEach((badge) => {
+      const image = screen.getByAltText(
+        `${badge.label} — see how KAMMAND advises on this framework`,
+      );
+      expect(image).toBeTruthy();
+      expect(image.closest("a")?.getAttribute("href")).toBe(badge.href);
+    });
+
+    // The marquee duplicates the set for a seamless loop. The copy must be
+    // hidden from assistive technology so each framework is announced once.
+    const strip = screen
+      .getByRole("heading", { name: "Frameworks KAMMAND advises on" })
+      .closest("section");
+    expect(strip).toBeTruthy();
+    expect(strip?.querySelectorAll('ul[aria-hidden="true"]').length).toBe(1);
+    expect(strip?.querySelectorAll("ul").length).toBe(2);
+
+    // Sectors were removed from the strip.
+    industrySummaries.forEach((industry) => {
+      expect(strip?.textContent).not.toContain(industry.title);
+    });
+  });
+
+  it("renders the why-KAMMAND principles from the shared company source", () => {
+    render(<Home />);
+
     expect(
-      screen.queryByText("Why third-party risk needs continuous oversight"),
-    ).toBeNull();
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Built to be operated, not filed.",
+      }),
+    ).toBeTruthy();
+
+    operatingPrinciples.forEach((principle) => {
+      expect(
+        screen.getByRole("heading", { level: 3, name: principle.title }),
+      ).toBeTruthy();
+      expect(screen.getByText(principle.description)).toBeTruthy();
+    });
+  });
+
+  it("states what each engagement phase delivers without repeating phase headings", () => {
+    render(<Home />);
+
+    // Deliverables live inside the process section so the four phase titles
+    // appear exactly once on the page.
+    ["Discover", "Design", "Deliver", "Assure"].forEach((phase) => {
+      expect(screen.getAllByRole("heading", { name: phase })).toHaveLength(1);
+    });
+
+    expect(screen.getByText("A sequenced remediation roadmap")).toBeTruthy();
+    expect(screen.getByText("Control effectiveness review")).toBeTruthy();
+  });
+
+  it("renders every FAQ answer in the DOM so it stays crawlable", () => {
+    render(<Home />);
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Before you reach out." }),
+    ).toBeTruthy();
+
+    homepageFaqs.forEach((faq) => {
+      expect(screen.getByText(faq.question)).toBeTruthy();
+      expect(screen.getByText(faq.answer)).toBeTruthy();
+    });
+  });
+
+  it("omits proof and team entirely while they have no real entries", () => {
+    render(<Home />);
+
+    // AGENTS.md forbids fabricated case studies and credentials. These
+    // sections must stay absent rather than ship a placeholder.
+    expect(engagementOutcomes.length === 0 || teamMembers.length > 0).toBe(true);
+
+    if (engagementOutcomes.length === 0) {
+      expect(
+        screen.queryByRole("heading", { name: "Work in regulated environments." }),
+      ).toBeNull();
+    }
+
+    if (teamMembers.length === 0) {
+      expect(
+        screen.queryByRole("heading", { name: "Who you will actually work with." }),
+      ).toBeNull();
+    }
   });
 
   it("renders the final CTA with the canonical consultation and services links", () => {

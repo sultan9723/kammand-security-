@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { HomepageHero } from "../components/sections/homepage/hero";
 import { FinalCtaSection } from "../components/sections/homepage/final-cta";
 import { FrameworkIntelligence } from "../components/sections/homepage/framework-intelligence";
-import { InsightsSection } from "../components/sections/homepage/insights";
+import { FaqSection } from "../components/sections/homepage/faq";
+import { IndustriesSection } from "../components/sections/homepage/industries";
+import { ProofSection } from "../components/sections/homepage/proof";
+import { TeamSection } from "../components/sections/homepage/team";
+import { TrustStrip } from "../components/sections/homepage/trust-strip";
+import { WhyKammandSection } from "../components/sections/homepage/why-kammand";
 import { ProcessSection } from "../components/sections/homepage/process";
 import { ServicesSection } from "../components/sections/homepage/services";
 import { getAbsoluteUrl, getOrganizationJsonLd, siteConfig } from "../lib/site";
@@ -34,10 +39,15 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
       <HomepageHero />
-      <FrameworkIntelligence />
+      <TrustStrip />
       <ServicesSection />
+      <FrameworkIntelligence />
+      <IndustriesSection />
       <ProcessSection />
-      <InsightsSection />
+      <WhyKammandSection />
+      <ProofSection />
+      <TeamSection />
+      <FaqSection />
       <FinalCtaSection />
     </main>
   );
