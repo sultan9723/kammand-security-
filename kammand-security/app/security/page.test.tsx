@@ -25,11 +25,11 @@ describe("SecurityRoute", () => {
   it("distinguishes current website implementation from future integrations", () => {
     render(<SecurityRoute />);
 
-    expect(screen.getAllByText("CURRENT WEBSITE IMPLEMENTATION").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Current Website Implementation").length).toBeGreaterThan(0);
     expect(
       screen.getByText("Conservative security headers are configured in the Next.js application."),
     ).toBeTruthy();
-    expect(screen.getAllByText("FUTURE TRUST DOCUMENTATION").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Future Trust Documentation").length).toBeGreaterThan(0);
     expect(screen.getByText(/not presented as active on this page/i)).toBeTruthy();
   });
 

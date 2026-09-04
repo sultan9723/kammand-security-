@@ -5,7 +5,6 @@ import { join } from "node:path";
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import Home from "./page";
-import { operatingPrinciples } from "../lib/company";
 import { homepageFaqs } from "../lib/faq";
 import { engagementOutcomes } from "../lib/proof";
 import { teamMembers } from "../lib/team";
@@ -24,7 +23,7 @@ describe("Home", () => {
 
     expect(headings).toHaveLength(1);
     expect(headings[0].textContent).toBe(
-      "SAMA compliance and cybersecurity assurance for GCC fintechs and payment companies.",
+      "SAMA, NCA, PDPL and ISO 27001 assurance for regulated organizations across the GCC.",
     );
     expect(
       screen.getByText(
@@ -75,19 +74,45 @@ describe("Home", () => {
   it("renders crawlable hero CTAs", () => {
     render(<Home />);
 
-    // Matched on the hero CTA name exactly. The final-CTA section also links
-    // "Book a Consultation" to /book, so a looser assertion would keep passing
-    // while no longer testing the hero at all.
     expect(
-      screen
-        .getAllByRole("link", { name: "Book a SAMA Readiness Consultation" })
-        .some((link) => link.getAttribute("href") === "/book"),
-    ).toBe(true);
+      document
+        .querySelector(".homepage-hero__actions")
+        ?.querySelector('a[href="/book"]')?.textContent,
+    ).toContain("Book a Consultation");
     expect(
-      screen.getAllByRole("link", { name: "Explore Services" }).every(
-        (link) => link.getAttribute("href") === "/services",
+      screen.getAllByRole("link", { name: "Book a Consultation" }).some(
+        (link) => link.getAttribute("href") === "/book",
       ),
     ).toBe(true);
+    expect(
+      document
+        .querySelector(".homepage-hero__actions")
+        ?.querySelector('a[href="/services"]')?.textContent,
+    ).toContain("Explore Services");
+  });
+
+  it("places the services overview before the homepage capabilities section", () => {
+    render(<Home />);
+
+    const serviceOverviewTitle = screen.getByRole("heading", {
+      level: 2,
+      name: "GRC and cybersecurity services for regulated organizations.",
+    });
+    const capabilitiesTitle = screen.getByRole("heading", {
+      level: 2,
+      name: "GRC and cybersecurity, built around your risk.",
+    });
+
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(
+      screen
+        .getAllByRole("link", { name: "Explore Services" })
+        .some((link) => link.getAttribute("href") === "#homepage-capabilities"),
+    ).toBe(true);
+    expect(
+      serviceOverviewTitle.compareDocumentPosition(capabilitiesTitle) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 
   it("keeps the visualization out of the heading hierarchy", () => {
@@ -117,12 +142,8 @@ describe("Home", () => {
     const css = readFileSync(join(process.cwd(), "app", "globals.css"), "utf8");
 
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(css).toContain(".grc-orbit__ring");
-    expect(css).toContain(".grc-orbit__connector");
-    expect(css).toContain("stroke-dashoffset: 0");
     expect(css).toContain(".grc-orbit__core");
-    expect(css).toContain(".grc-orbit__node");
-    expect(css).toContain("transform: none");
+    expect(css).toContain("animation: none");
   });
 
   it("renders the framework intelligence section without adding another H1", () => {
@@ -135,7 +156,7 @@ describe("Home", () => {
         name: "Multiple Frameworks. One control environment.",
       }),
     ).toBeTruthy();
-    expect(screen.getByText("FRAMEWORK INTELLIGENCE")).toBeTruthy();
+    expect(screen.getByText("Framework Intelligence")).toBeTruthy();
     expect(
       screen.getByText(
         "One coordinated approach to governance, cybersecurity, privacy and assurance.",
@@ -215,10 +236,10 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "End-to-end GRC and cybersecurity advisory.",
+        name: "GRC and cybersecurity, built around your risk.",
       }),
     ).toBeTruthy();
-    expect(screen.getByText("CAPABILITIES")).toBeTruthy();
+    expect(screen.getByText("Capabilities")).toBeTruthy();
 
     [
       "GRC Advisory",
@@ -294,7 +315,7 @@ describe("Home", () => {
         name: "From uncertainty to assurance.",
       }),
     ).toBeTruthy();
-    expect(screen.getByText("HOW WE WORK")).toBeTruthy();
+    expect(screen.getByText("How We Work")).toBeTruthy();
     expect(
       screen.getByRole("list", { name: "KAMMAND advisory process" }),
     ).toBeTruthy();
@@ -354,7 +375,7 @@ describe("Home", () => {
         name: "Built for regulated sectors.",
       }),
     ).toBeTruthy();
-    expect(screen.getByText("INDUSTRIES")).toBeTruthy();
+    expect(screen.getByText("Industries")).toBeTruthy();
 
     [
       { name: "Financial Services", href: "/industries/financial-services" },
@@ -424,21 +445,44 @@ describe("Home", () => {
     });
   });
 
-  it("renders the why-KAMMAND principles from the shared company source", () => {
+  it("compares traditional work against the KAMMAND model row for row", () => {
     render(<Home />);
 
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "Built to be operated, not filed.",
+        name: "A clearer model for regulated work.",
       }),
     ).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Traditional Work" }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "The KAMMAND Model" }),
+    ).toBeTruthy();
 
-    operatingPrinciples.forEach((principle) => {
-      expect(
-        screen.getByRole("heading", { level: 3, name: principle.title }),
-      ).toBeTruthy();
-      expect(screen.getByText(principle.description)).toBeTruthy();
+    // The comparison only reads if row N on the left is answered by row N on
+    // the right, so both lists must stay the same length and in the same order.
+    const [traditional, kammand] = screen
+      .getAllByRole("list")
+      .filter((list) => list.querySelectorAll("li").length === 6)
+      .slice(0, 2);
+
+    expect(traditional?.querySelectorAll("li")).toHaveLength(6);
+    expect(kammand?.querySelectorAll("li")).toHaveLength(6);
+
+    [
+      "Manual reviews and fragmented inputs",
+      "Repeated effort across audits and cycles",
+    ].forEach((item) => {
+      expect(screen.getByText(item)).toBeTruthy();
+    });
+
+    [
+      "Structured governance tied to real operations",
+      "Ongoing assurance that improves decision-making",
+    ].forEach((item) => {
+      expect(screen.getByText(item)).toBeTruthy();
     });
   });
 
@@ -513,5 +557,9 @@ describe("Home", () => {
         (link) => link.getAttribute("href") === "/services",
       ),
     ).toBe(true);
+    expect(screen.getByText("Focused advisory discussion")).toBeTruthy();
+    expect(screen.getByText("Practical next steps")).toBeTruthy();
+    expect(screen.getByText("Evidence-led direction")).toBeTruthy();
+    expect(screen.getByText("Confidential handling")).toBeTruthy();
   });
 });

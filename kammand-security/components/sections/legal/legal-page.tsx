@@ -4,6 +4,7 @@ import { cookieRegistry } from "../../../lib/consent/categories";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 
 export type LegalPageKind =
   | "privacy"
@@ -236,7 +237,7 @@ const pageDefinitions: Record<LegalPageKind, LegalPageDefinition> = {
         body: "Client information should be handled according to business need, appropriate access, confidentiality, agreed engagement requirements, and applicable privacy or security obligations. This page does not define retention periods or legal terms for future engagements.",
       },
       {
-        eyebrow: "CURRENT WEBSITE IMPLEMENTATION",
+        eyebrow: "Current Website Implementation",
         title: "Security practices currently visible in the codebase",
         body: "These statements are limited to what the current website implementation supports. Production deployment controls must still be verified in the deployment environment.",
         items: currentWebsitePractices,
@@ -257,7 +258,7 @@ const pageDefinitions: Record<LegalPageKind, LegalPageDefinition> = {
         links: [{ href: "/contact", label: "Contact KAMMAND" }],
       },
       {
-        eyebrow: "FUTURE TRUST DOCUMENTATION",
+        eyebrow: "Future Trust Documentation",
         title: "Additional trust documentation will be published as it becomes available",
         body: "The website is structured to support more detailed trust information later. Unavailable documents are not represented as live proof.",
         items: plannedTrustItems,
@@ -300,7 +301,7 @@ function LegalHero({ kind, page }: { kind: LegalPageKind; page: LegalPageDefinit
         />
         <div className="legal-hero__grid">
           <div className="legal-hero__content">
-            <p className="eyebrow">{page.eyebrow}</p>
+            <SectionLabel as="p">{page.eyebrow}</SectionLabel>
             <h1 id="legal-title">{page.title}</h1>
             <p className="text-body-large">{page.copy}</p>
             <p className="legal-page__updated">Last updated: August 16, 2026</p>
@@ -335,7 +336,7 @@ function LegalStatus({ page }: { page: LegalPageDefinition }) {
     <section className="legal-status" aria-labelledby="legal-status-title">
       <Container>
         <div className="legal-status__grid">
-          <p className="eyebrow">{page.statusLabel}</p>
+          <SectionLabel as="p">{page.statusLabel}</SectionLabel>
           <h2 id="legal-status-title">{page.statusTitle}</h2>
           <p>{page.statusCopy}</p>
         </div>
@@ -370,7 +371,7 @@ function LegalDocument({ sections }: { sections: readonly LegalSection[] }) {
               <article className="legal-section" id={toSectionId(section.title)} key={section.title}>
                 <p className="legal-section__number">{String(index + 1).padStart(2, "0")}</p>
                 <div className="legal-section__body">
-                  {section.eyebrow ? <p className="eyebrow">{section.eyebrow}</p> : null}
+                  {section.eyebrow ? <SectionLabel as="p">{section.eyebrow}</SectionLabel> : null}
                   <h2>{section.title}</h2>
                   <p>{section.body}</p>
                   {section.items ? (
@@ -445,7 +446,7 @@ function LegalRelated({ related }: { related: NonNullable<LegalPageDefinition["r
     <section className="legal-related" aria-labelledby="legal-related-title">
       <Container>
         <div className="legal-related__grid">
-          <p className="eyebrow">{related.eyebrow}</p>
+          <SectionLabel as="p">{related.eyebrow}</SectionLabel>
           <div>
             <h2 id="legal-related-title">{related.title}</h2>
             <p>{related.copy}</p>

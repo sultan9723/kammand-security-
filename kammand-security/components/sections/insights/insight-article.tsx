@@ -4,6 +4,7 @@ import { formatInsightDate } from "../../../lib/insights";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 
 type InsightArticleProps = {
   insight: InsightEntry;
@@ -68,7 +69,7 @@ export function InsightArticle({ insight, relatedInsights }: InsightArticleProps
           <Container>
             <div className="editorial-grid">
               <div className="editorial-sidebar">
-                <p className="eyebrow">SOURCES</p>
+                <SectionLabel as="p">Sources</SectionLabel>
               </div>
               <div className="editorial-content">
                 <h2 id="article-sources-title">References and source material.</h2>
@@ -94,7 +95,7 @@ export function InsightArticle({ insight, relatedInsights }: InsightArticleProps
         <Container>
           <div className="detail-two-column">
             <div>
-              <p className="eyebrow">RELATED INSIGHTS</p>
+              <SectionLabel as="p">Related Insights</SectionLabel>
               <h2 id="article-related-title">Continue reading with context.</h2>
               {relatedInsights.length > 0 ? (
                 <div className="related-service-list">
@@ -114,7 +115,7 @@ export function InsightArticle({ insight, relatedInsights }: InsightArticleProps
             </div>
 
             <div>
-              <p className="eyebrow">KAMMAND CONTEXT</p>
+              <SectionLabel as="p">Kammand Context</SectionLabel>
               <h2>Relevant services and frameworks.</h2>
               <div className="related-service-list">
                 {[...(insight.relatedServices ?? []), ...(insight.relatedFrameworks ?? [])].map(
@@ -135,7 +136,9 @@ export function InsightArticle({ insight, relatedInsights }: InsightArticleProps
         <Container>
           <div className="final-cta__grid">
             <div className="final-cta__content">
-              <p className="eyebrow">CONSULTATION</p>
+              <SectionLabel as="p" variant="dark">
+                Consultation
+              </SectionLabel>
               <h2 id="insight-final-cta-title">Need to turn insight into action?</h2>
               <p className="text-body-large">
                 Talk with KAMMAND about governance, risk, compliance, evidence,

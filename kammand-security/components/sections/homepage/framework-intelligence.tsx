@@ -1,4 +1,5 @@
 import { Container } from "../../ui/container";
+import { SectionLabel } from "../../ui/section-label";
 import { FrameworkControlModel } from "./framework-control-model";
 
 export function FrameworkIntelligence() {
@@ -36,7 +37,9 @@ export function FrameworkIntelligence() {
 
       <Container className="container-wide framework-intelligence__container">
         <div className="framework-intelligence__header">
-          <p className="framework-intelligence__eyebrow">FRAMEWORK INTELLIGENCE</p>
+          <SectionLabel align="center" as="p" className="framework-intelligence__eyebrow">
+            Framework Intelligence
+          </SectionLabel>
           <h2
             id="framework-intelligence-title"
             aria-label="Multiple Frameworks. One control environment."

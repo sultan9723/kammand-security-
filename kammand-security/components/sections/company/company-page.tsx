@@ -6,6 +6,7 @@ import { engagementSteps, serviceSummaries } from "../../../lib/services";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 
 const storyHighlights = [
   { icon: "building", label: "Advisory-first approach" },
@@ -92,7 +93,7 @@ export function CompanyPage() {
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Company", href: "/company" }]} />
           <div className="company-hero__grid">
             <div className="company-hero__content">
-              <p className="eyebrow">COMPANY</p>
+              <SectionLabel as="p">Company</SectionLabel>
               <h1 id="company-title">Clarity, accountability, and security by design<span>.</span></h1>
               <p className="text-body-large">Use this page to understand how KAMMAND approaches advisory work, what principles guide it, and why the practice is structured the way it is.</p>
               <div className="company-hero__actions" aria-label="Company actions">
@@ -109,7 +110,7 @@ export function CompanyPage() {
         <Container className="container-wide">
           <div className="company-story__panel">
             <div className="company-story__content">
-              <p className="eyebrow">OUR STORY</p>
+              <SectionLabel as="p">Our Story</SectionLabel>
               <h2 id="company-story-title">Built to bring structure to complexity.</h2>
               <p>KAMMAND supports organizations in turning complex governance, risk, and security requirements into practical operating structures that create clarity, ownership, and confidence.</p>
               <p>We work with regulated and high-accountability organizations to connect obligations to clearer ownership, practical controls, management-ready evidence, and sustainable assurance routines.</p>
@@ -132,7 +133,9 @@ export function CompanyPage() {
       <section className="company-principles" aria-labelledby="company-principles-title">
         <Container className="container-wide">
           <header className="company-section-header">
-            <p className="eyebrow">OPERATING PRINCIPLES</p>
+            <SectionLabel align="center" as="p">
+              Operating Principles
+            </SectionLabel>
             <h2 id="company-principles-title">The principles behind the work.</h2>
           </header>
           <ol className="company-principles__grid" aria-label="KAMMAND operating principles">
@@ -151,7 +154,9 @@ export function CompanyPage() {
       <section className="company-process" aria-labelledby="company-process-title">
         <Container className="container-wide">
           <header className="company-section-header">
-            <p className="eyebrow">HOW KAMMAND WORKS</p>
+            <SectionLabel align="center" as="p">
+              How Kammand Works
+            </SectionLabel>
             <h2 id="company-process-title">Structured advisory from discovery to assurance.</h2>
           </header>
           <ol className="company-process__steps" aria-label="KAMMAND engagement approach">
@@ -172,7 +177,7 @@ export function CompanyPage() {
         <Container className="container-wide">
           <div className="company-audience__grid">
             <article aria-labelledby="company-expertise-title">
-              <p className="eyebrow">AREAS OF EXPERTISE</p>
+              <SectionLabel as="p">Areas of Expertise</SectionLabel>
               <h2 id="company-expertise-title">Capabilities connected to governance, risk, and assurance.</h2>
               <ul className="company-expertise-list" aria-label="KAMMAND capability links">
                 {serviceSummaries.map((service, index) => (
@@ -184,7 +189,7 @@ export function CompanyPage() {
               </div>
             </article>
             <article aria-labelledby="company-support-title">
-              <p className="eyebrow">WHO WE HELP</p>
+              <SectionLabel as="p">Who We Help</SectionLabel>
               <h2 id="company-support-title">Organizations that need practical control over risk.</h2>
               <ul className="company-support-list">
                 {supportContexts.map((context) => <li key={context}><span aria-hidden="true"><CompanyIcon name="check" /></span>{context}</li>)}
@@ -202,7 +207,7 @@ export function CompanyPage() {
         <Container className="container-wide">
           <div className="company-commitments__panel">
             <div>
-              <p className="eyebrow">ADVISORY CHARACTERISTICS</p>
+              <SectionLabel as="p">Advisory Characteristics</SectionLabel>
               <h2 id="company-commitments-title">Independent thinking. Practical outcomes. Long-term impact.</h2>
             </div>
             <ul>
@@ -216,7 +221,7 @@ export function CompanyPage() {
         <Container className="container-wide">
           <div className="company-connect__panel">
             <div>
-              <p className="eyebrow">LET&apos;S CONNECT</p>
+              <SectionLabel as="p">Let&apos;s Connect</SectionLabel>
               <h2 id="company-final-cta-title">Let&apos;s bring clarity and control to your priorities.</h2>
               <p>Talk with our team to explore the right starting point for your organization.</p>
             </div>

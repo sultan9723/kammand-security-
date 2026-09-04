@@ -3,6 +3,7 @@ import type { IndustryDetail } from "../../../lib/industries";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 type IndustryDetailTemplateProps = { industry: IndustryDetail };
@@ -24,7 +25,7 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Industries", href: "/industries" }, { label: industry.title, href: industry.href }]} />
           <div className="industry-profile__hero-grid">
             <div className="industry-profile__hero-content">
-              <p className="eyebrow">{industry.eyebrow}</p>
+              <SectionLabel as="p">{industry.eyebrow}</SectionLabel>
               <h1 id="industry-detail-title">{industry.h1}</h1>
               <p className="text-body-large">{industry.positioning}</p>
               <div className="industry-profile__hero-actions" aria-label={`${industry.title} actions`}>
@@ -47,7 +48,7 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
       <section className="industry-profile__context" aria-labelledby="industry-context-title">
         <Container className="container-wide">
           <div className="industry-profile__context-band">
-            <div><p className="eyebrow">INDUSTRY CONTEXT</p><h2 id="industry-context-title">Operating context changes the work.</h2></div>
+            <div><SectionLabel as="p">Industry Context</SectionLabel><h2 id="industry-context-title">Operating context changes the work.</h2></div>
             <p>{industry.context}</p>
           </div>
         </Container>
@@ -56,7 +57,9 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
       <section className="industry-profile__challenges" aria-labelledby="industry-challenges-title">
         <Container>
           <div className="industry-profile__section-header">
-            <p className="eyebrow">KEY GRC AND CYBERSECURITY CHALLENGES</p>
+            <SectionLabel align="center" as="p">
+              Key GRC and Cybersecurity Challenges
+            </SectionLabel>
             <h2 id="industry-challenges-title">Where governance and cybersecurity often need structure.</h2>
             <p>These are industry-specific advisory themes, not claims about every organization in the sector.</p>
           </div>
@@ -69,7 +72,7 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
       <section className="industry-profile__support" aria-labelledby="industry-help-title">
         <Container className="container-wide">
           <div className="industry-profile__support-band">
-            <div><p className="eyebrow">HOW KAMMAND CAN HELP</p><h2 id="industry-help-title">Advisory support matched to the environment.</h2></div>
+            <div><SectionLabel as="p">How Kammand Can Help</SectionLabel><h2 id="industry-help-title">Advisory support matched to the environment.</h2></div>
             <p>{industry.support}</p>
           </div>
         </Container>
@@ -78,7 +81,9 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
       <section className="industry-profile__services" aria-labelledby="industry-services-title">
         <Container>
           <div className="industry-profile__section-header">
-            <p className="eyebrow">RELEVANT SERVICES</p>
+            <SectionLabel align="center" as="p">
+              Relevant Services
+            </SectionLabel>
             <h2 id="industry-services-title">Service paths connected to this context.</h2>
             <p>These links reflect likely advisory focus areas for this industry context. They are not presented as a universal package.</p>
           </div>
@@ -92,7 +97,7 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
         <Container className="container-wide">
           <div className="industry-profile__frameworks-grid">
             <div className="industry-profile__frameworks-copy">
-              <p className="eyebrow">REGULATORY AND FRAMEWORK CONTEXT</p>
+              <SectionLabel as="p">Regulatory and Framework Context</SectionLabel>
               <h2 id="industry-framework-title">Applicability depends on jurisdiction, activity and scope.</h2>
               <p>{industry.frameworkContext}</p>
             </div>
@@ -107,12 +112,12 @@ export function IndustryDetailTemplate({ industry }: IndustryDetailTemplateProps
         <Container className="container-wide">
           <div className="industry-profile__engagement-grid">
             <article aria-labelledby="industry-engagement-title">
-              <p className="eyebrow">PRACTICAL ENGAGEMENT AREAS</p>
+              <SectionLabel as="p">Practical Engagement Areas</SectionLabel>
               <h2 id="industry-engagement-title">Where work can become more structured.</h2>
               <ul>{industry.engagementAreas.map((area) => <li key={area}><IndustryIcon name="check" /><span>{area}</span></li>)}</ul>
             </article>
             <article aria-labelledby="industry-related-title">
-              <p className="eyebrow">RELATED INDUSTRIES</p>
+              <SectionLabel as="p">Related Industries</SectionLabel>
               <h2 id="industry-related-title">Adjacent operating contexts.</h2>
               <div className="industry-profile__related-grid">
                 {industry.relatedIndustries.map((related, index) => <Link href={related.href} key={related.href}><span>{String(index + 1).padStart(2, "0")}</span><IndustryIcon name="people" /><strong>{related.title}</strong><DirectionalArrow /></Link>)}

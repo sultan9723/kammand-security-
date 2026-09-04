@@ -97,7 +97,7 @@ export const samaCsfFramework = {
   title: "SAMA CSF",
   fullName: "SAMA Cyber Security Framework",
   href: "/frameworks/sama-csf",
-  eyebrow: "FRAMEWORK / SAMA CSF",
+  eyebrow: "Framework / SAMA CSF",
   h1: "Build a practical approach to SAMA cybersecurity requirements.",
   description:
     "High-level advisory context for organizations that need to organize governance, controls, evidence, and assurance around SAMA cybersecurity expectations.",
@@ -205,7 +205,7 @@ export const ncaEccFramework = {
   title: "NCA ECC",
   fullName: "NCA Essential Cybersecurity Controls",
   href: "/frameworks/nca-ecc",
-  eyebrow: "FRAMEWORK / NCA ECC",
+  eyebrow: "Framework / NCA ECC",
   h1: "Build cybersecurity controls around clear accountability.",
   description:
     "High-level advisory context for organizations organizing cybersecurity controls, ownership, evidence, and assurance around NCA ECC considerations.",
@@ -313,7 +313,7 @@ export const pdplFramework = {
   title: "Saudi PDPL",
   fullName: "Saudi Personal Data Protection Law",
   href: "/frameworks/pdpl",
-  eyebrow: "FRAMEWORK / SAUDI PDPL",
+  eyebrow: "Framework / Saudi PDPL",
   h1: "Turn privacy obligations into practical governance.",
   description:
     "High-level advisory context for privacy governance, evidence, organizational responsibility, and security coordination around Saudi PDPL considerations.",
@@ -415,7 +415,7 @@ export const iso27001Framework = {
   title: "ISO 27001",
   fullName: "ISO/IEC 27001",
   href: "/frameworks/iso-27001",
-  eyebrow: "FRAMEWORK / ISO 27001",
+  eyebrow: "Framework / ISO 27001",
   h1: "Build an information security management system that works in practice.",
   description:
     "High-level advisory context for strengthening information security governance, risk-based management, evidence, readiness, and assurance practices.",

@@ -1,0 +1,269 @@
+/* WHY KAMMAND — traditional vs the KAMMAND model.
+
+   Tokens only, with two deliberate local exceptions noted at their point of
+   use. The comparison depends on the two panels staying dimensionally
+   identical: same padding, same header height, same row height. Change one
+   side and you must change the other, or the alignment that carries the whole
+   section stops reading. */
+
+.section {
+  padding-block: var(--space-30);
+  background: var(--color-bg);
+}
+
+/* ---- Intro ---- */
+
+.intro {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  margin-bottom: var(--space-16);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-5);
+  color: var(--color-accent);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  font-weight: 600;
+  /* Local: the brief calls for wider tracking than --letter-spacing-eyebrow
+     (0.08em) at this size. Scoped to this one label. */
+  letter-spacing: 0.14em;
+  line-height: var(--line-height-label);
+  text-transform: uppercase;
+}
+
+.heading {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h2);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.standfirst {
+  max-width: 46ch;
+  margin: var(--space-5) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+}
+
+/* ---- Comparison ---- */
+
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 900px) {
+  .comparison {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+}
+
+.panel {
+  /* Local: the brief specifies a 20px panel radius. The scale tops out at
+     --radius-lg (10px), so this is a deliberate deviation, scoped here rather
+     than added to the global scale. Revert to var(--radius-lg) to undo. */
+  --panel-radius: 20px;
+
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  border-radius: var(--panel-radius);
+  transition: border-color var(--duration-standard) var(--ease-out);
+}
+
+@media (min-width: 900px) {
+  .panel {
+    padding: var(--space-10);
+  }
+}
+
+.panelTraditional {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.panelTraditional:hover {
+  border-color: var(--color-border-strong);
+}
+
+.panelKammand {
+  background: var(--color-ink);
+  border: 1px solid var(--color-accent);
+}
+
+.panelKammand:hover {
+  border-color: var(--color-accent-hover);
+}
+
+/* ---- Panel header ----
+   Fixed min-height on both sides so the first row starts on the same axis
+   even when one title wraps and the other does not. */
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 60px;
+  margin-bottom: var(--space-8);
+}
+
+.panelTitle {
+  max-width: none;
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: 1.1;
+}
+
+.panelTraditional .panelTitle {
+  color: var(--color-text);
+}
+
+.panelKammand .panelTitle {
+  color: var(--color-ink-text);
+}
+
+.headerMarkTraditional,
+.headerMarkKammand {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-pill);
+}
+
+.headerMarkTraditional {
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.headerMarkKammand {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+
+.headerMarkTraditional svg,
+.headerMarkKammand svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+/* ---- Rows ----
+   Row height is set by min-height rather than by content, so row N lines up
+   across both panels regardless of how the text wraps. */
+
+.rows {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 68px;
+  padding-block: var(--space-3);
+}
+
+@media (min-width: 900px) {
+  .row {
+    min-height: 76px;
+  }
+}
+
+.panelTraditional .row:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panelKammand .row:not(:last-child) {
+  border-bottom: 1px solid rgb(255 255 255 / 0.14);
+}
+
+.rowText {
+  font-size: var(--font-size-body);
+  line-height: 1.45;
+}
+
+@media (min-width: 900px) {
+  .rowText {
+    font-size: var(--font-size-body-lg);
+  }
+}
+
+.panelTraditional .rowText {
+  color: var(--color-text);
+}
+
+.panelKammand .rowText {
+  color: var(--color-ink-text);
+}
+
+.rowMarkTraditional,
+.rowMarkKammand {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+}
+
+@media (min-width: 900px) {
+  .rowMarkTraditional,
+  .rowMarkKammand {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.rowMarkTraditional {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+}
+
+.rowMarkKammand {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+
+.rowMarkTraditional svg,
+.rowMarkKammand svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
+}

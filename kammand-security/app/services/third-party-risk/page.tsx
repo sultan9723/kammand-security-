@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThirdPartyRiskActivities } from "../../../components/sections/services/third-party-risk-activities";
 import { ServiceDetailTemplate } from "../../../components/sections/services/service-detail-template";
 import { thirdPartyRiskService } from "../../../lib/services";
 import {
@@ -43,7 +44,10 @@ export default function ThirdPartyRiskPage() {
           __html: JSON.stringify([breadcrumbJsonLd, serviceJsonLd]),
         }}
       />
-      <ServiceDetailTemplate service={thirdPartyRiskService} />
+      <ServiceDetailTemplate
+        service={thirdPartyRiskService}
+        activitiesContent={<ThirdPartyRiskActivities service={thirdPartyRiskService} />}
+      />
     </>
   );
 }

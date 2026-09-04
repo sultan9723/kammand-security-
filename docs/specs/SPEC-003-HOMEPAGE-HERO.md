@@ -2,7 +2,7 @@
 
 Status: Approved for implementation
 Project: KAMMAND Security
-Version: 1.1
+Version: 1.2
 Depends on:
 - SPEC-001 - KAMMAND Design System
 - SPEC-002 - Global Header and Navigation
@@ -254,6 +254,9 @@ SPEC-003 is complete only when:
 
 ## 14. Amendment v1.1 - Niche repositioning
 
+> The H1 and its rationale in this section are superseded by section 15.
+> The rest of the amendment stands.
+
 Supersedes section 2 in full, and the operating-state list in section 4.
 Everything else in this spec - layout, motion, reduced motion, responsive
 targets, semantics, performance, component architecture - stands unchanged.
@@ -369,3 +372,70 @@ enumerated the old terms.
 Hero only. The site header, final-CTA section, footer, and `siteConfig` each
 hold their own independent `Book a Consultation` string and were deliberately
 not touched. The site header still reads `Book a Consultation`.
+
+## 15. Amendment v1.2 - Regulator-led headline
+
+Supersedes the H1 in section 14.2. Every other element of the v1.1 amendment -
+supporting copy, credibility line, CTAs, positioning line, and the operating
+states in 14.4 - stands unchanged.
+
+### 15.1 Why
+
+The v1.1 H1 named a sector: `SAMA compliance and cybersecurity assurance for GCC
+fintechs and payment companies.` A whole-site narrative audit found that this
+contradicted the site it sits on. The site ships six industry pages, four of
+them - Insurance, Technology, Healthcare, Critical & Regulated Enterprises -
+outside that niche. A visitor from any of those four was told, in the largest
+type on the site, that the practice was for someone else, and had to disbelieve
+the headline to reach their own sector page.
+
+The business decision was to position as a GCC regulated-sector generalist
+rather than a fintech specialist, keeping all six industries at equal weight.
+
+### 15.2 Approved H1
+
+`SAMA, NCA, PDPL and ISO 27001 assurance for regulated organizations across the GCC.`
+
+### 15.3 Why the regulators and not the sector
+
+The obvious execution of "generalist" was `Cybersecurity and compliance
+assurance for regulated organizations across the GCC` - which is four words from
+the pre-v1.1 supporting line the audit had already flagged as generic, and would
+have returned the hero to roughly where it started.
+
+Naming the four frameworks keeps the specificity that made v1.1 worth doing
+while dropping the sector narrowing that made it wrong. Frameworks are
+verifiable, they are the four this site actually covers, and they are
+sector-neutral: a bank CISO and a healthcare CIO each recognise their own
+regulator in the line.
+
+At 79 characters against the previous 82, the new H1 needs no change to the
+bespoke type ramp on `.homepage-hero__title`.
+
+### 15.4 Open question - SAMA supervisory scope
+
+The hero leads on SAMA while only two of six industry pages name SAMA in prose:
+Financial Services and Fintech & Payments. Insurance, Technology, Healthcare and
+Critical & Regulated Enterprises name NCA, PDPL and ISO 27001 instead.
+
+During this amendment it was suggested that SAMA applies to all six sectors.
+That was not acted on. SAMA is the Saudi Central Bank and its published remit
+covers banks, insurers, finance companies, and payment and fintech entities - not
+healthcare providers or general technology companies, which sit under NCA for
+cybersecurity and PDPL for personal data. Adding SAMA to those pages would place
+a false regulatory claim on a site whose proposition is regulatory accuracy, and
+`AGENTS.md` forbids fabricated compliance claims.
+
+**No industry page's framework list was changed.** The question stays open: if
+SAMA does apply more widely for KAMMAND's engagements - Insurance being the most
+likely - the specific sectors need confirming before the copy changes.
+
+The sector-neutral H1 above is correct either way, so this does not block.
+
+### 15.5 Knock-on not addressed here
+
+The primary CTA still reads `Book a SAMA Readiness Consultation`, set in v1.1
+when the hero was fintech- and SAMA-led. With a sector-neutral H1 it is now the
+narrowest element on the page, and the only place on the site using that
+wording - nine other locations say `Book a Consultation`. Tracked as its own
+punch-list item; not changed here.

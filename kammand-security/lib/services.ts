@@ -96,7 +96,7 @@ const frameworkByLabel = Object.fromEntries(
 export const grcAdvisoryService = {
   title: "GRC Advisory",
   href: "/services/grc-advisory",
-  eyebrow: "GRC ADVISORY",
+  eyebrow: "GRC Advisory",
   h1: "Governance, risk and compliance that works in practice.",
   description:
     "Advisory support for organizations that need practical governance, risk, compliance, and control structures aligned to their regulatory environment.",
@@ -137,7 +137,7 @@ export const grcAdvisoryService = {
 export const virtualCisoService = {
   title: "Virtual CISO",
   href: "/services/virtual-ciso",
-  eyebrow: "VIRTUAL CISO",
+  eyebrow: "Virtual CISO",
   h1: "Strategic security leadership without unnecessary overhead.",
   description:
     "Senior cybersecurity leadership and governance support for organizations that need direction, structure, accountability, and executive-level security oversight.",
@@ -182,7 +182,7 @@ export const virtualCisoService = {
 export const riskManagementService = {
   title: "Risk Management",
   href: "/services/risk-management",
-  eyebrow: "RISK MANAGEMENT",
+  eyebrow: "Risk Management",
   h1: "Turn cybersecurity risk into decisions your business can act on.",
   description:
     "Cybersecurity risk management advisory that helps organizations identify, assess, own, prioritize, and manage risk through practical governance routines.",
@@ -227,7 +227,7 @@ export const riskManagementService = {
 export const thirdPartyRiskService = {
   title: "Third-Party Risk",
   href: "/services/third-party-risk",
-  eyebrow: "THIRD-PARTY RISK",
+  eyebrow: "Third-Party Risk",
   h1: "Know where supplier risk enters your control environment.",
   description:
     "Third-party risk advisory for supplier classification, due diligence, evidence review, onboarding controls, and ongoing oversight routines.",
@@ -273,7 +273,7 @@ export const thirdPartyRiskService = {
 export const auditReadinessService = {
   title: "Audit Readiness",
   href: "/services/audit-readiness",
-  eyebrow: "AUDIT READINESS",
+  eyebrow: "Audit Readiness",
   h1: "Prepare before the auditor starts asking for evidence.",
   description:
     "Audit readiness support that helps teams organize controls, ownership, documentation, evidence, and remediation before assessment activity begins.",
@@ -318,7 +318,7 @@ export const auditReadinessService = {
 export const securityAssuranceService = {
   title: "Security Assurance",
   href: "/services/security-assurance",
-  eyebrow: "SECURITY ASSURANCE",
+  eyebrow: "Security Assurance",
   h1: "Confidence that controls exist, operate, and can be evidenced.",
   description:
     "Security assurance advisory that reviews control design, operating effectiveness, evidence quality, and remediation tracking without overstating formal audit authority.",

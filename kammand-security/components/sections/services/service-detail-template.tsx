@@ -1,12 +1,16 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { engagementSteps, type ServiceDetail } from "../../../lib/services";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 type ServiceDetailTemplateProps = {
   service: ServiceDetail;
+  activitiesContent?: ReactNode;
+  valueContent?: ReactNode;
 };
 
 type ServiceIconName = "check" | "document" | "framework" | "people" | "scope";
@@ -19,7 +23,7 @@ function ServiceIcon({ name }: { name: ServiceIconName }) {
   return <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" /><path d="m10 16 4 4 8-9" /></svg>;
 }
 
-export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
+export function ServiceDetailTemplate({ service, activitiesContent, valueContent }: ServiceDetailTemplateProps) {
   return (
     <main className="service-profile" id="main-content">
       <section className="service-profile__hero" aria-labelledby="service-detail-title">
@@ -27,7 +31,7 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }, { label: service.title, href: service.href }]} />
           <div className="service-profile__hero-grid">
             <div className="service-profile__hero-content">
-              <p className="eyebrow">{service.eyebrow}</p>
+              <SectionLabel as="p">{service.eyebrow}</SectionLabel>
               <h1 id="service-detail-title">{service.h1}</h1>
               <p className="text-body-large">{service.valueProposition}</p>
               <div className="service-profile__hero-actions" aria-label={`${service.title} actions`}>
@@ -53,7 +57,7 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
       <section className="service-profile__context" aria-labelledby="service-context-title">
         <Container className="container-wide">
           <div className="service-profile__context-band">
-            <div><p className="eyebrow">CONTEXT</p><h2 id="service-context-title">The problem this service addresses.</h2></div>
+            <div><SectionLabel as="p">Context</SectionLabel><h2 id="service-context-title">The problem this service addresses.</h2></div>
             <p>{service.problem}</p>
           </div>
         </Container>
@@ -62,44 +66,50 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
       <section className="service-profile__work" aria-labelledby="service-work-title">
         <Container>
           <div className="service-profile__section-header">
-            <p className="eyebrow">WHAT KAMMAND DOES</p>
+            <SectionLabel align="center" as="p">
+              What Kammand Does
+            </SectionLabel>
             <h2 id="service-work-title">Practical advisory across governance, controls and evidence.</h2>
             <p>{service.approach}</p>
           </div>
-          <ul className="service-profile__activity-grid" aria-label={`${service.title} activities`}>
-            {service.activities.map((activity, index) => (
-              <li key={activity}>
-                <span className="service-profile__activity-number">{String(index + 1).padStart(2, "0")}</span>
-                <span className="service-profile__activity-icon"><ServiceIcon name="document" /></span>
-                <p>{activity}</p>
-              </li>
-            ))}
-          </ul>
+          {activitiesContent ?? (
+            <ul className="service-profile__activity-grid" aria-label={`${service.title} activities`}>
+              {service.activities.map((activity, index) => (
+                <li key={activity}>
+                  <span className="service-profile__activity-number">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="service-profile__activity-icon"><ServiceIcon name="document" /></span>
+                  <p>{activity}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </Container>
       </section>
 
-      <section className="service-profile__value" aria-label={`${service.title} audience and outcomes`}>
-        <Container className="container-wide">
-          <div className="service-profile__value-grid">
-            <article aria-labelledby="service-fit-title">
-              <p className="eyebrow">WHO THIS IS FOR</p>
-              <h2 id="service-fit-title">Organizations that need a clearer GRC operating model.</h2>
-              <ul>{service.audience.map((item) => <li key={item}><ServiceIcon name="people" /><span>{item}</span></li>)}</ul>
-            </article>
-            <article aria-labelledby="service-outcomes-title">
-              <p className="eyebrow">PRACTICAL OUTCOMES</p>
-              <h2 id="service-outcomes-title">What the engagement helps strengthen.</h2>
-              <ul>{service.outcomes.map((item) => <li key={item}><ServiceIcon name="check" /><span>{item}</span></li>)}</ul>
-            </article>
-          </div>
-        </Container>
-      </section>
+      {valueContent ?? (
+        <section className="service-profile__value" aria-label={`${service.title} audience and outcomes`}>
+          <Container className="container-wide">
+            <div className="service-profile__value-grid">
+              <article aria-labelledby="service-fit-title">
+                <SectionLabel as="p">Who This Is For</SectionLabel>
+                <h2 id="service-fit-title">Organizations that need a clearer GRC operating model.</h2>
+                <ul>{service.audience.map((item) => <li key={item}><ServiceIcon name="people" /><span>{item}</span></li>)}</ul>
+              </article>
+              <article aria-labelledby="service-outcomes-title">
+                <SectionLabel as="p">Practical Outcomes</SectionLabel>
+                <h2 id="service-outcomes-title">What the engagement helps strengthen.</h2>
+                <ul>{service.outcomes.map((item) => <li key={item}><ServiceIcon name="check" /><span>{item}</span></li>)}</ul>
+              </article>
+            </div>
+          </Container>
+        </section>
+      )}
 
       <section className="service-profile__frameworks" aria-labelledby="service-frameworks-title">
         <Container className="container-wide">
           <div className="service-profile__frameworks-grid">
             <div className="service-profile__frameworks-copy">
-              <p className="eyebrow">RELEVANT FRAMEWORKS</p>
+              <SectionLabel as="p">Relevant Frameworks</SectionLabel>
               <h2 id="service-frameworks-title">Framework-aware without overstating equivalence.</h2>
               <p>This service can support work across common GCC and international frameworks. Exact applicability and control mapping depend on organizational scope and obligations.</p>
             </div>
@@ -117,7 +127,9 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
       <section className="service-profile__process" id="service-engagement" aria-labelledby="service-engagement-title">
         <Container>
           <div className="service-profile__section-header">
-            <p className="eyebrow">ENGAGEMENT APPROACH</p>
+            <SectionLabel align="center" as="p">
+              Engagement Approach
+            </SectionLabel>
             <h2 id="service-engagement-title">A structured path from discovery to assurance.</h2>
             <p>A consistent engagement structure keeps scope, ownership, implementation, and assurance connected.</p>
           </div>
@@ -137,7 +149,9 @@ export function ServiceDetailTemplate({ service }: ServiceDetailTemplateProps) {
       <section className="service-profile__related" aria-labelledby="related-services-title">
         <Container>
           <div className="service-profile__section-header">
-            <p className="eyebrow">RELATED SERVICES</p>
+            <SectionLabel align="center" as="p">
+              Related Services
+            </SectionLabel>
             <h2 id="related-services-title">Adjacent support for risk, audit and assurance.</h2>
           </div>
           <div className="service-profile__related-grid">
