@@ -2,6 +2,7 @@ import Link from "next/link";
 import { engagementSteps, frameworks, serviceSummaries } from "../../../lib/services";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 const serviceIcons = [
@@ -24,6 +25,11 @@ const frameworkRelationships = [
 
 type ServiceIconName = (typeof serviceIcons)[number];
 type Relationship = (typeof frameworkRelationships)[number][number];
+type ServicesOverviewHeroSectionProps = {
+  capabilitiesHref?: string;
+  headingLevel?: "h1" | "h2";
+  titleId?: string;
+};
 
 const heroValues = [
   {
@@ -254,55 +260,14 @@ function RelationshipMark({ relationship }: { relationship: Relationship }) {
 export function ServicesOverviewPage() {
   return (
     <main className="services-overview" id="main-content">
-      <section className="services-overview__hero" aria-labelledby="services-overview-title">
-        <Container className="container-wide">
-          <div className="services-overview__hero-frame">
-            <div className="services-overview__hero-main">
-              <div className="services-overview__hero-content">
-                <div className="services-overview__hero-kicker">
-                  <p className="eyebrow">SERVICES</p>
-                </div>
-                <h1 id="services-overview-title">
-                  GRC and cybersecurity services for regulated organizations.
-                </h1>
-                <p className="text-body-large">
-                  Use this page to compare KAMMAND&apos;s advisory paths and choose
-                  the workstream that matches your current GRC or security need.
-                </p>
-                <div className="services-overview__hero-actions">
-                  <Link className="ui-button ui-button--primary" href="/book">
-                    Book a Consultation
-                    <DirectionalArrow />
-                  </Link>
-                  <Link className="ui-button ui-button--secondary" href="#service-capabilities">
-                    Explore Services
-                    <DirectionalArrow />
-                  </Link>
-                </div>
-              </div>
-              <ServicesHeroDiagram />
-            </div>
-            <ul className="services-overview__hero-values" aria-label="KAMMAND service principles">
-              {heroValues.map((value) => (
-                <li key={value.title}>
-                  <span className="services-overview__hero-value-icon">
-                    <HeroValueIcon icon={value.icon} />
-                  </span>
-                  <span>
-                    <strong>{value.title}</strong>
-                    <small>{value.description}</small>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Container>
-      </section>
+      <ServicesOverviewHeroSection />
 
       <section className="services-capabilities" id="service-capabilities" aria-labelledby="service-summaries-title">
         <Container>
           <div className="services-overview__section-header">
-            <p className="eyebrow">CAPABILITIES</p>
+            <SectionLabel align="center" as="p">
+              Capabilities
+            </SectionLabel>
             <h2 id="service-summaries-title">Choose the advisory path that fits the problem.</h2>
           </div>
 
@@ -325,7 +290,7 @@ export function ServicesOverviewPage() {
         <Container>
           <div className="services-frameworks__layout">
             <div className="services-frameworks__content">
-              <p className="eyebrow">FRAMEWORK RELATIONSHIPS</p>
+              <SectionLabel as="p">Framework Relationships</SectionLabel>
               <h2 id="framework-support-title">Frameworks shape how the work is organized.</h2>
               <p>
                 KAMMAND services help teams organize controls, evidence,
@@ -388,7 +353,9 @@ export function ServicesOverviewPage() {
       <section className="services-engagement" id="how-we-work" aria-labelledby="engagements-title">
         <Container>
           <div className="services-overview__section-header">
-            <p className="eyebrow">HOW ENGAGEMENTS WORK</p>
+            <SectionLabel align="center" as="p">
+              How Engagements Work
+            </SectionLabel>
             <h2 id="engagements-title">Structured advisory from discovery to assurance.</h2>
           </div>
           <ol className="services-engagement__steps" aria-label="Service engagement process">
@@ -413,5 +380,60 @@ export function ServicesOverviewPage() {
 
       <FinalCtaSection />
     </main>
+  );
+}
+
+export function ServicesOverviewHeroSection({
+  capabilitiesHref = "#service-capabilities",
+  headingLevel = "h1",
+  titleId = "services-overview-title",
+}: ServicesOverviewHeroSectionProps = {}) {
+  const Heading = headingLevel;
+
+  return (
+    <section className="services-overview__hero" aria-labelledby={titleId}>
+      <Container className="container-wide">
+        <div className="services-overview__hero-frame">
+          <div className="services-overview__hero-main">
+            <div className="services-overview__hero-content">
+              <div className="services-overview__hero-kicker">
+                <SectionLabel as="p">Services</SectionLabel>
+              </div>
+              <Heading id={titleId}>
+                GRC and cybersecurity services for regulated organizations.
+              </Heading>
+              <p className="text-body-large">
+                Use this page to compare KAMMAND&apos;s advisory paths and choose
+                the workstream that matches your current GRC or security need.
+              </p>
+              <div className="services-overview__hero-actions">
+                <Link className="ui-button ui-button--primary" href="/book">
+                  Book a Consultation
+                  <DirectionalArrow />
+                </Link>
+                <Link className="ui-button ui-button--secondary" href={capabilitiesHref}>
+                  Explore Services
+                  <DirectionalArrow />
+                </Link>
+              </div>
+            </div>
+            <ServicesHeroDiagram />
+          </div>
+          <ul className="services-overview__hero-values" aria-label="KAMMAND service principles">
+            {heroValues.map((value) => (
+              <li key={value.title}>
+                <span className="services-overview__hero-value-icon">
+                  <HeroValueIcon icon={value.icon} />
+                </span>
+                <span>
+                  <strong>{value.title}</strong>
+                  <small>{value.description}</small>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Container>
+    </section>
   );
 }

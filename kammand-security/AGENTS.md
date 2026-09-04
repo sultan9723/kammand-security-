@@ -178,6 +178,14 @@ Avoid:
 - continuous animation without meaning
 - layout thrashing
 
+**Exception:** the homepage hero orbit (`components/sections/homepage/grc-orbit.tsx`) is an approved
+cinematic/ambient treatment. Its continuous atmosphere glow, particle drift, and rotating decorative
+rings are allowed there specifically because the composition itself carries the meaning - KAMMAND as
+the fixed center of a GRC cycle that runs continuously - and its signal-flow layer explicitly animates
+data moving through GOVERN / ASSESS / CONTROL / REMEDIATE / EVIDENCE / COMPLY / ASSURE / REPORT. This
+exception is scoped to that one component; it does not license ambient or particle motion elsewhere on
+the site.
+
 Always respect `prefers-reduced-motion`.
 
 ## Content

@@ -91,6 +91,11 @@ true and verifiable:
 
 If a trust section cannot yet be filled truthfully, **leave it out entirely**.
 
+This skill decides whether a *section* ships. For deciding whether a
+*sentence* ships — classifying a claim, verifying it, and pinning it with a
+test — use `kammand-content-integrity`, which carries the procedure and the
+empty-array pattern used by `lib/proof.ts` and `lib/team.ts`.
+
 ## Placeholder content is worse than no content
 
 Never ship a section whose content is "coming soon", "in review", "publication

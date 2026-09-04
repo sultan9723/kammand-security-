@@ -1,5 +1,8 @@
+"use client";
+
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
-import type { CSSProperties } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import {
   capabilities,
   frameworks,
@@ -7,24 +10,325 @@ import {
   type FrameworkIconName,
 } from "./framework-data";
 
-export function FrameworkControlModel() {
+const MotionLink = motion.create(Link);
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Entrance timeline for the parts of the diagram that still reveal on scroll:
+ * the control model appears, the rings fade in, the frameworks resolve, and
+ * capabilities settle in last. The connecting arrows are no longer part of
+ * this sequence — they are static from first paint, and carry their own
+ * separate, continuously repeating signal-dot cycle instead (see
+ * CYCLE_DURATION below).
+ */
+const T = {
+  core: 0,
+  rings: 0.45,
+  frameworks: 0.62,
+  capabilities: 1.72,
+} as const;
+
+/**
+ * Entry offsets push each framework slightly away from centre before it
+ * resolves inward, so the reveal reads as convergence rather than a fade.
+ * Outer frameworks travel further than inner ones.
+ */
+const FRAMEWORK_ENTRY = [
+  { x: -20, y: -8 },
+  { x: -10, y: -12 },
+  { x: 10, y: -12 },
+  { x: 20, y: -8 },
+] as const;
+
+/** Pull toward centre when the control model is hovered. Signs mirror. */
+const MAGNET_X = [6, 4, -4, -6] as const;
+
+/**
+ * Coordinates below are measured from the rendered diagram at its fixed
+ * desktop breakpoint (this section only renders at >=1024px, and the layout
+ * caps at the 1280px container, so one measurement covers the whole visible
+ * range). They deliberately do not match the framework/capability icons'
+ * naive evenly-spaced guess — the icons render a few px off that guess, and
+ * an arrow that does not start under its icon is the "floating" look this
+ * pass fixes.
+ */
+const FRAMEWORK_ICON_X = [118, 436, 764, 1082] as const;
+const CAPABILITY_ICON_X = [92, 295, 498, 702, 905, 1108] as const;
+
+/** SSR / first-paint fallback, calibrated against a 1280px measurement.
+ * Replaced by useBoxEntryPoints' real measurement immediately on mount. */
+const BOX_ENTRY_X_FALLBACK = [510, 570, 630, 690] as const;
+
+/**
+ * The box's rendered width turned out not to be a stable fraction of the
+ * stage across breakpoints -- measured at 25% of stage width at 1280px but
+ * only 15.5% at 1920px, because of a pre-existing, apparently-dead legacy CSS
+ * rule elsewhere in this file that also sets a width on the outer wrapper
+ * (unrelated to this change, left alone). A hardcoded spread calibrated to
+ * one breakpoint therefore overshoots the box at others -- confirmed the
+ * rightmost entry point landing outside the box at 1920px.
+ *
+ * Measuring the box's real rendered position at runtime sidesteps that
+ * entirely: it stays correct against whatever width wins the CSS cascade, at
+ * any viewport, without depending on which rule that turns out to be.
+ */
+function useBoxEntryPoints(
+  stageRef: React.RefObject<HTMLElement | null>,
+  boxRef: React.RefObject<HTMLElement | null>,
+) {
+  const [entryX, setEntryX] = useState<readonly number[]>(BOX_ENTRY_X_FALLBACK);
+
+  useLayoutEffect(() => {
+    function measure() {
+      const stage = stageRef.current;
+      const box = boxRef.current;
+
+      if (!stage || !box) {
+        return;
+      }
+
+      const stageRect = stage.getBoundingClientRect();
+      const boxRect = box.getBoundingClientRect();
+
+      if (stageRect.width === 0) {
+        return;
+      }
+
+      const unitsPerPx = 1200 / stageRect.width;
+      const centerUnit = ((boxRect.left + boxRect.right) / 2 - stageRect.left) * unitsPerPx;
+      const halfSpreadUnit = (boxRect.width * unitsPerPx * 0.6) / 2;
+      const step = (halfSpreadUnit * 2) / 3;
+
+      setEntryX([
+        centerUnit - halfSpreadUnit,
+        centerUnit - halfSpreadUnit + step,
+        centerUnit - halfSpreadUnit + step * 2,
+        centerUnit + halfSpreadUnit,
+      ]);
+    }
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [stageRef, boxRef]);
+
+  return entryX;
+}
+
+/** Where the box's true top/bottom edges land in each circuit SVG's local
+ * coordinates, measured against the rendered box — not the SVG's own nominal
+ * 90-unit height, which the box overlaps into by a few units at each end. */
+const BOX_TOP_Y = 56;
+const BOX_BOTTOM_Y = 0;
+const CAPABILITY_ICON_TOP_Y = 156;
+const DISTRIBUTION_Y = 48;
+
+const ELBOW_Y = 40;
+const CORNER_R = 12;
+
+function upperConnectorPath(startX: number, destX: number) {
+  const dir = destX > startX ? 1 : -1;
+  return [
+    `M ${startX} 6`,
+    `V ${ELBOW_Y - CORNER_R}`,
+    `Q ${startX} ${ELBOW_Y} ${startX + dir * CORNER_R} ${ELBOW_Y}`,
+    `H ${destX - dir * CORNER_R}`,
+    `Q ${destX} ${ELBOW_Y} ${destX} ${ELBOW_Y + CORNER_R}`,
+    `V ${BOX_TOP_Y}`,
+  ].join(" ");
+}
+
+const CAPABILITY_BRANCH_X = CAPABILITY_ICON_X;
+
+/** Signal-dot cycle. One pass through the whole diagram, then it repeats. */
+const CYCLE_DURATION = 3.2;
+const INPUT_STAGGER = 0.12;
+const INPUT_DOT_DURATION = 0.9;
+const OUTPUT_PHASE_START = 1.5;
+const OUTPUT_STAGGER = 0.08;
+const OUTPUT_DOT_DURATION = 0.7;
+const INNER_RING_PULSE_DURATION = 5.2;
+
+/**
+ * The scroll-entry variants above are serialised into the SSR markup as
+ * inline opacity:0 on nodes/capabilities/core/rings, so without JavaScript
+ * the diagram would render permanently invisible even though its text is
+ * present. The connector/spine/branch paths need no such rule any more --
+ * they are plain static paths with no inline opacity, JS or not.
+ */
+const NO_SCRIPT_FALLBACK = `
+.framework-control__node,
+.framework-control__capability,
+.framework-control__core,
+.framework-control__radar-rings {
+  opacity: 1 !important;
+  transform: none !important;
+}
+`;
+
+const stageVariants: Variants = {
+  hidden: {},
+  visible: {},
+};
+
+const coreVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.94, y: 8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: T.core, ease: EASE },
+  },
+};
+
+const ringsVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.92 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.7, delay: T.rings, ease: EASE },
+  },
+};
+
+const frameworkVariants: Variants = {
+  hidden: (index: number) => ({
+    opacity: 0,
+    x: FRAMEWORK_ENTRY[index]?.x ?? 0,
+    y: FRAMEWORK_ENTRY[index]?.y ?? 0,
+  }),
+  visible: (index: number) => ({
+    opacity: 1,
+    x: 0,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 105,
+      damping: 21,
+      delay: T.frameworks + index * 0.1,
+    },
+  }),
+};
+
+/**
+ * Capabilities resolve centre-out rather than left-to-right, so the bus reads
+ * as distributing from the control model instead of scanning across.
+ */
+const capabilityVariants: Variants = {
+  hidden: { opacity: 0, y: 14, scale: 0.96 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.44,
+      delay: T.capabilities + Math.abs(index - 2.5) * 0.08,
+      ease: EASE,
+    },
+  }),
+};
+
+type Waypoints = { x: number[]; y: number[]; times: number[] };
+
+/**
+ * One dot, following the same waypoints as the static path it rides. Waypoints
+ * are the path's straight-segment corners (not its small rounded fillets) —
+ * close enough at this speed and scale that the shortcut across a 12-unit
+ * corner radius is not perceptible.
+ *
+ * delay positions this dot within the first 3.5s cycle; repeatDelay is set so
+ * duration + repeatDelay always equals the full cycle, so every dot lands on
+ * the same beat every time round rather than drifting.
+ */
+function SignalDot({
+  waypoints,
+  duration,
+  delay,
+  reduceMotion,
+}: {
+  waypoints: Waypoints;
+  duration: number;
+  delay: number;
+  reduceMotion: boolean | null;
+}) {
+  if (reduceMotion) {
+    return null;
+  }
+
+  const opacity = waypoints.times.map((_, index) =>
+    index === 0 || index === waypoints.times.length - 1 ? 0 : 1,
+  );
+
   return (
-    <div
+    <motion.circle
+      className="framework-control__signal"
+      r="3.5"
+      initial={false}
+      animate={{ cx: waypoints.x, cy: waypoints.y, opacity }}
+      transition={{
+        cx: { duration, times: waypoints.times, ease: "linear" },
+        cy: { duration, times: waypoints.times, ease: "linear" },
+        opacity: { duration, times: waypoints.times, ease: "easeInOut" },
+        delay,
+        repeat: Infinity,
+        repeatDelay: CYCLE_DURATION - duration,
+      }}
+    />
+  );
+}
+
+export function FrameworkControlModel() {
+  const reduceMotion = useReducedMotion();
+  const [coreEngaged, setCoreEngaged] = useState(false);
+
+  const stageRef = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const entryX = useBoxEntryPoints(stageRef, boxRef);
+  const upperConnectorPaths = FRAMEWORK_ICON_X.map((startX, index) =>
+    upperConnectorPath(startX, entryX[index] ?? BOX_ENTRY_X_FALLBACK[index]),
+  );
+
+  /** Magnetic response and continuous rotation are both motion-only. */
+  const magnetic = !reduceMotion && coreEngaged;
+  const spring = { type: "spring", stiffness: 180, damping: 22 } as const;
+
+  return (
+    <motion.div
       className="framework-control"
       aria-label="KAMMAND framework intelligence control model"
+      initial={reduceMotion ? false : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={stageVariants}
     >
-      <div className="framework-control__stage">
-        <ul className="framework-control__nodes" aria-label="Framework pages">
+      {/* The entry variants are serialised into the SSR markup as inline
+          `opacity:0`, so without JavaScript the whole diagram would render
+          permanently invisible even though its text is present. This restores
+          the resolved state when scripting is unavailable. */}
+      <noscript>
+        <style>{NO_SCRIPT_FALLBACK}</style>
+      </noscript>
+
+      <motion.div className="framework-control__stage" ref={stageRef} variants={stageVariants}>
+        <motion.ul className="framework-control__nodes" aria-label="Framework pages">
           {frameworks.map((framework, index) => (
-            <li
+            <motion.li
               className={`framework-control__node framework-control__node--${framework.key}`}
               key={framework.key}
               style={{ "--framework-index": index } as CSSProperties}
+              custom={index}
+              variants={frameworkVariants}
             >
-              <Link
+              <MotionLink
                 aria-label={`${framework.label}: ${framework.descriptor}`}
                 className="framework-control__link"
                 href={framework.href}
+                animate={{
+                  x: magnetic ? MAGNET_X[index] : 0,
+                  scale: magnetic ? 1.01 : 1,
+                }}
+                whileHover={reduceMotion ? undefined : { y: -5, scale: 1.02 }}
+                transition={spring}
               >
                 <span className="framework-control__icon" aria-hidden="true">
                   <FrameworkIcon icon={framework.icon} />
@@ -35,10 +339,10 @@ export function FrameworkControlModel() {
                   {framework.descriptor}
                 </span>
                 <span className="framework-control__anchor" aria-hidden="true" />
-              </Link>
-            </li>
+              </MotionLink>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
 
         <div className="framework-control__circuit-upper" aria-hidden="true">
           <svg
@@ -46,67 +350,113 @@ export function FrameworkControlModel() {
             viewBox="0 0 1200 90"
             preserveAspectRatio="none"
           >
+            <defs>
+              <marker
+                id="framework-control-arrow-upper"
+                markerHeight="8"
+                markerUnits="strokeWidth"
+                markerWidth="8"
+                orient="auto"
+                refX="7"
+                refY="4"
+                viewBox="0 0 8 8"
+              >
+                <path className="framework-control__arrowhead" d="M 1 1 L 7 4 L 1 7" />
+              </marker>
+            </defs>
             <g className="framework-control__connectors">
-              <circle className="framework-control__anchor-dot" cx="150" cy="6" r="3.5" />
-              <path
-                className="framework-control__connector"
-                d="M 150 6 V 40 Q 150 52 165 52 H 535 Q 550 52 550 64 V 90"
-                style={{ "--framework-index": 0 } as CSSProperties}
-              />
+              {/* Static from first paint: no entrance draw-in on these paths.
+                  The only motion here is the signal dot below. */}
+              {upperConnectorPaths.map((d, index) => (
+                <path
+                  className="framework-control__connector"
+                  d={d}
+                  key={FRAMEWORK_ICON_X[index]}
+                  markerEnd="url(#framework-control-arrow-upper)"
+                />
+              ))}
+              {FRAMEWORK_ICON_X.map((startX, index) => {
+                const destX = entryX[index] ?? BOX_ENTRY_X_FALLBACK[index];
 
-              <circle className="framework-control__anchor-dot" cx="450" cy="6" r="3.5" />
-              <path
-                className="framework-control__connector"
-                d="M 450 6 V 30 Q 450 42 465 42 H 565 Q 575 42 575 52 V 90"
-                style={{ "--framework-index": 1 } as CSSProperties}
-              />
-
-              <circle className="framework-control__anchor-dot" cx="750" cy="6" r="3.5" />
-              <path
-                className="framework-control__connector"
-                d="M 750 6 V 30 Q 750 42 735 42 H 635 Q 625 42 625 52 V 90"
-                style={{ "--framework-index": 2 } as CSSProperties}
-              />
-
-              <circle className="framework-control__anchor-dot" cx="1050" cy="6" r="3.5" />
-              <path
-                className="framework-control__connector"
-                d="M 1050 6 V 40 Q 1050 52 1035 52 H 665 Q 650 52 650 64 V 90"
-                style={{ "--framework-index": 3 } as CSSProperties}
-              />
+                return (
+                  <SignalDot
+                    key={startX}
+                    reduceMotion={reduceMotion}
+                    duration={INPUT_DOT_DURATION}
+                    delay={index * INPUT_STAGGER}
+                    waypoints={{
+                      x: [startX, startX, destX, destX],
+                      y: [6, ELBOW_Y, ELBOW_Y, BOX_TOP_Y],
+                      times: [0, 0.3, 0.7, 1],
+                    }}
+                  />
+                );
+              })}
             </g>
           </svg>
         </div>
 
         <div className="framework-control__center-wrapper">
-          <div className="framework-control__radar-rings" aria-hidden="true">
-            <svg
-              className="framework-control__radar-svg"
-              viewBox="0 0 500 500"
-              preserveAspectRatio="xMidYMid meet"
+          <div className="framework-control__hub">
+            <motion.div
+              className="framework-control__radar-rings"
+              aria-hidden="true"
+              variants={ringsVariants}
             >
-              {[50, 80, 110, 140, 170, 200, 230].map((radius, index) => (
-                <circle
-                  className="framework-control__ring"
-                  cx="250"
-                  cy="250"
-                  key={radius}
-                  r={radius}
-                  style={{ "--ring-index": index } as CSSProperties}
+              <svg
+                className="framework-control__radar-svg"
+                viewBox="0 0 400 400"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <motion.g
+                  style={{ originX: "200px", originY: "200px" }}
+                  animate={reduceMotion ? undefined : { rotate: 360 }}
+                  transition={{ duration: 70, ease: "linear", repeat: Infinity }}
+                >
+                  <circle className="framework-control__ring framework-control__ring--outer" cx="200" cy="200" r="199" />
+                  <circle className="framework-control__ring framework-control__ring--middle" cx="200" cy="200" r="194" />
+                </motion.g>
+                <motion.g
+                  style={{ originX: "200px", originY: "200px" }}
+                  animate={reduceMotion ? undefined : { rotate: -360 }}
+                  transition={{ duration: 55, ease: "linear", repeat: Infinity }}
+                >
+                  <circle className="framework-control__ring framework-control__ring--faint" cx="200" cy="200" r="198" />
+                </motion.g>
+                <motion.circle
+                  className="framework-control__ring framework-control__ring--inner"
+                  cx="200"
+                  cy="200"
+                  r="188"
+                  style={{ originX: "200px", originY: "200px" }}
+                  animate={reduceMotion ? undefined : { scale: [1, 1.015, 1] }}
+                  transition={{
+                    duration: INNER_RING_PULSE_DURATION,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                 />
-              ))}
-            </svg>
-          </div>
+              </svg>
+            </motion.div>
 
-          <div className="framework-control__core">
-            <div className="framework-control__core-content">
-              <span className="framework-control__core-mark" aria-hidden="true">
-                <KammandLogoMark />
-              </span>
-              <div className="framework-control__core-text">
-                <span className="framework-control__brand-title">KAMMAND</span>
-                <span className="framework-control__brand-subtitle">CONTROL MODEL</span>
-              </div>
+            <div className="framework-control__core-position">
+              <motion.div
+                className="framework-control__core"
+                variants={coreVariants}
+                onHoverStart={() => setCoreEngaged(true)}
+                onHoverEnd={() => setCoreEngaged(false)}
+                transition={spring}
+              >
+                <div className="framework-control__core-content" ref={boxRef}>
+                  <span className="framework-control__core-mark" aria-hidden="true">
+                    <KammandLogoMark />
+                  </span>
+                  <div className="framework-control__core-text">
+                    <span className="framework-control__brand-title">KAMMAND</span>
+                    <span className="framework-control__brand-subtitle">CONTROL MODEL</span>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -114,49 +464,80 @@ export function FrameworkControlModel() {
         <div className="framework-control__circuit-lower" aria-hidden="true">
           <svg
             className="framework-control__circuit-svg"
-            viewBox="0 0 1200 90"
+            viewBox="0 0 1200 160"
             preserveAspectRatio="none"
           >
+            <defs>
+              <marker
+                id="framework-control-arrow-lower"
+                markerHeight="8"
+                markerUnits="strokeWidth"
+                markerWidth="8"
+                orient="auto"
+                refX="7"
+                refY="4"
+                viewBox="0 0 8 8"
+              >
+                <path className="framework-control__arrowhead" d="M 1 1 L 7 4 L 1 7" />
+              </marker>
+            </defs>
             <g className="framework-control__capability-lines">
-              <path className="framework-control__lower-spine" d="M 600 0 V 22" />
-              <circle className="framework-control__anchor-dot" cx="600" cy="22" r="3.5" />
-              <path className="framework-control__lower-spine" d="M 600 22 V 44" />
-              <circle className="framework-control__anchor-dot" cx="600" cy="44" r="3.5" />
-              <path className="framework-control__lower-spine" d="M 100 44 H 1100" />
+              {/* Trunk and the two symmetric distribution rails carry no
+                  arrowhead: they are routing, not a pointer at a destination.
+                  Only the six drops into the capability icons are arrows. */}
+              <path
+                className="framework-control__lower-spine"
+                d={`M 600 ${BOX_BOTTOM_Y} V ${DISTRIBUTION_Y}`}
+              />
+              <path
+                className="framework-control__lower-spine"
+                d={`M 600 ${DISTRIBUTION_Y} H ${CAPABILITY_ICON_X[0]}`}
+              />
+              <path
+                className="framework-control__lower-spine"
+                d={`M 600 ${DISTRIBUTION_Y} H ${CAPABILITY_ICON_X[CAPABILITY_ICON_X.length - 1]}`}
+              />
 
-              {[100, 300, 500, 700, 900, 1100].map((x, index) => (
-                <g key={x}>
-                  <circle
-                    className="framework-control__anchor-dot"
-                    cx={x}
-                    cy="44"
-                    r="3.5"
-                    style={{ "--capability-index": index } as CSSProperties}
-                  />
-                  <path
-                    className="framework-control__capability-branch"
-                    d={`M ${x} 44 V 84`}
-                    style={{ "--capability-index": index } as CSSProperties}
-                  />
-                  <circle
-                    className="framework-control__anchor-dot"
-                    cx={x}
-                    cy="84"
-                    r="3.5"
-                    style={{ "--capability-index": index } as CSSProperties}
-                  />
-                </g>
+              {CAPABILITY_BRANCH_X.map((x) => (
+                <path
+                  className="framework-control__capability-branch"
+                  d={`M ${x} ${DISTRIBUTION_Y} V ${CAPABILITY_ICON_TOP_Y}`}
+                  key={x}
+                  markerEnd="url(#framework-control-arrow-lower)"
+                />
+              ))}
+
+              {CAPABILITY_ICON_X.map((targetX, index) => (
+                <SignalDot
+                  key={targetX}
+                  reduceMotion={reduceMotion}
+                  duration={OUTPUT_DOT_DURATION}
+                  delay={OUTPUT_PHASE_START + index * OUTPUT_STAGGER}
+                  waypoints={{
+                    x: [600, 600, targetX, targetX],
+                    y: [BOX_BOTTOM_Y, DISTRIBUTION_Y, DISTRIBUTION_Y, CAPABILITY_ICON_TOP_Y],
+                    times: [0, 0.25, 0.65, 1],
+                  }}
+                />
               ))}
             </g>
           </svg>
         </div>
 
-        <ul className="framework-control__capabilities" aria-label="Capability domains">
+        <motion.ul
+          className="framework-control__capabilities"
+          aria-label="Capability domains"
+          variants={stageVariants}
+        >
           {capabilities.map((capability, index) => (
-            <li
+            <motion.li
               className="framework-control__capability"
               key={capability.label}
               style={{ "--capability-index": index } as CSSProperties}
+              custom={index}
+              variants={capabilityVariants}
+              whileHover={reduceMotion ? undefined : { y: -2 }}
+              transition={spring}
             >
               <span className="framework-control__capability-icon" aria-hidden="true">
                 <CapabilityIcon icon={capability.icon} />
@@ -167,11 +548,11 @@ export function FrameworkControlModel() {
               <span className="framework-control__capability-description">
                 {capability.description}
               </span>
-            </li>
+            </motion.li>
           ))}
-        </ul>
-      </div>
-    </div>
+        </motion.ul>
+      </motion.div>
+    </motion.div>
   );
 }
 

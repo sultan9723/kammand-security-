@@ -91,7 +91,7 @@ const industryByTitle = Object.fromEntries(
 export const financialServicesIndustry = {
   title: "Financial Services",
   href: "/industries/financial-services",
-  eyebrow: "INDUSTRY / FINANCIAL SERVICES",
+  eyebrow: "Industry / Financial Services",
   h1: "Strengthen governance and cyber resilience in financial services.",
   description:
     "GRC and cybersecurity advisory context for financial services organizations managing governance, cyber risk, evidence, third-party exposure, and assurance.",
@@ -140,7 +140,7 @@ export const financialServicesIndustry = {
 export const fintechPaymentsIndustry = {
   title: "Fintech & Payments",
   href: "/industries/fintech-payments",
-  eyebrow: "INDUSTRY / FINTECH & PAYMENTS",
+  eyebrow: "Industry / Fintech & Payments",
   h1: "Build security governance that can keep pace with growth.",
   description:
     "GRC and cybersecurity advisory context for fintech and payment organizations scaling governance, control ownership, third-party dependencies, and readiness.",
@@ -188,7 +188,7 @@ export const fintechPaymentsIndustry = {
 export const insuranceIndustry = {
   title: "Insurance",
   href: "/industries/insurance",
-  eyebrow: "INDUSTRY / INSURANCE",
+  eyebrow: "Industry / Insurance",
   h1: "Make cyber risk visible, owned, and governable.",
   description:
     "GRC and cybersecurity advisory context for insurance organizations managing cyber risk, sensitive information, third-party dependencies, resilience, evidence, and assurance.",
@@ -235,7 +235,7 @@ export const insuranceIndustry = {
 export const technologyIndustry = {
   title: "Technology",
   href: "/industries/technology",
-  eyebrow: "INDUSTRY / TECHNOLOGY",
+  eyebrow: "Industry / Technology",
   h1: "Scale technology without losing control of security risk.",
   description:
     "GRC and cybersecurity advisory context for technology organizations scaling security governance, controls, vendor dependencies, evidence, customer assurance, and risk management.",
@@ -282,7 +282,7 @@ export const technologyIndustry = {
 export const healthcareIndustry = {
   title: "Healthcare",
   href: "/industries/healthcare",
-  eyebrow: "INDUSTRY / HEALTHCARE",
+  eyebrow: "Industry / Healthcare",
   h1: "Protect sensitive information through stronger governance.",
   description:
     "Cybersecurity and GRC advisory context for healthcare organizations managing sensitive information, privacy governance, continuity, third-party risk, accountability, and assurance.",
@@ -329,7 +329,7 @@ export const healthcareIndustry = {
 export const regulatedEnterprisesIndustry = {
   title: "Critical & Regulated Enterprises",
   href: "/industries/regulated-enterprises",
-  eyebrow: "INDUSTRY / REGULATED ENTERPRISES",
+  eyebrow: "Industry / Regulated Enterprises",
   h1: "Build assurance where operational accountability matters most.",
   description:
     "GRC and cybersecurity advisory context for organizations with high operational accountability, supplier dependencies, resilience needs, control ownership, evidence, and assurance pressure.",

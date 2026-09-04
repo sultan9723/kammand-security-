@@ -22,7 +22,7 @@ export function ProofSection() {
         <div className={styles.intro}>
           <SectionHeading
             description="Anonymised engagement shapes, described with client consent."
-            eyebrow="PROOF"
+            eyebrow="Proof"
             title="Work in regulated environments."
             titleId="proof-title"
           />

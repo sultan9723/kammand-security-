@@ -9,6 +9,25 @@ Measure, do not eyeball. Every finding in a QA report carries a number or a
 selector. "The hero feels big" is not a finding; "h1 is 76px and pushes the
 primary CTA to 694px, below a 588px fold" is.
 
+## Scope
+
+This skill is the **breadth** pass: one probe, every route, fast. Its
+accessibility checks — h1 count, heading skips, tap targets, alt presence — are
+smoke tests, not an audit. When any of them fails, or when accessibility is the
+actual subject, hand off:
+
+| Concern | Authority |
+|---------|-----------|
+| Focus parity, contrast, keyboard journeys, form semantics, reduced motion | `kammand-accessibility` |
+| Duplicate card/button treatments, dead selectors, literal values | `kammand-design-consistency` |
+| Section order, what a section is for, whether it earns its place | `grc-site-architecture` |
+| Placeholder and unsupported-claim copy | `kammand-content-integrity` |
+| LCP, CLS, bundle and image weight | `kammand-performance` |
+| Metadata, canonical, structured data | `kammand-seo` |
+
+Run this skill first to find out *where* to look, then the specific skill to
+decide what to do.
+
 ## Setup
 
 A dev server is often already running. Check before starting another:

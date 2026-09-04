@@ -21,7 +21,7 @@ export function TeamSection() {
         <div className={styles.intro}>
           <SectionHeading
             description="The practitioners who do the work, and the credentials they hold."
-            eyebrow="PRACTITIONERS"
+            eyebrow="Practitioners"
             title="Who you will actually work with."
             titleId="team-title"
           />

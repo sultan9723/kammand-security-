@@ -2,26 +2,27 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 
 const consultationOutcomes = [
   {
     icon: "discussion",
-    title: "Live expert discussion",
-    description: "Share your context and get practical, tailored guidance.",
+    title: "Focused advisory discussion",
+    description: "Share your context and active governance, risk, or assurance priority.",
   },
   {
     icon: "roadmap",
-    title: "Actionable roadmaps",
-    description: "Leave with clear next steps built around your priorities.",
+    title: "Practical next steps",
+    description: "Identify the service path, sequencing, and ownership questions to resolve.",
   },
   {
     icon: "outcomes",
-    title: "Measurable outcomes",
-    description: "Solutions designed to reduce risk and strengthen resilience.",
+    title: "Evidence-led direction",
+    description: "Connect the discussion to controls, documentation, and reviewable evidence.",
   },
   {
     icon: "confidential",
-    title: "Confidential & secure",
+    title: "Confidential handling",
     description: "Your information stays private and protected.",
   },
 ] as const;
@@ -169,17 +170,18 @@ type FinalCtaSectionProps = {
 export function FinalCtaSection({
   actionsLabel = "Final consultation actions",
   description = "Book a focused consultation about an active or near-term advisory need, or explore KAMMAND's service paths first.",
-  eyebrow = "CONSULTATION",
+  eyebrow = "Consultation",
   headingId = "final-cta-title",
   title = "Ready to bring clarity to your GRC program?",
 }: FinalCtaSectionProps = {}) {
   return (
     <section className="final-cta-home" aria-labelledby={headingId}>
       <Container className="container-wide">
-        <p className="eyebrow final-cta-home__eyebrow">{eyebrow}</p>
-
         <div className="final-cta-home__main">
           <div className="final-cta-home__content">
+            <SectionLabel as="p" className="final-cta-home__eyebrow">
+              {eyebrow}
+            </SectionLabel>
             <h2 id={headingId}>{title}</h2>
             <p className="text-body-large">{description}</p>
 

@@ -5,6 +5,7 @@ import { formatInsightDate } from "../../../lib/insights";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 
 type InsightsIndexProps = {
   insights: readonly InsightEntry[];
@@ -30,7 +31,9 @@ export function InsightsIndex({ insights }: InsightsIndexProps) {
             <InsightsHeroVisual side="left" />
 
             <div className="insights-index-hero__content">
-              <p className="eyebrow insights-index-eyebrow">INSIGHTS</p>
+              <SectionLabel align="center" as="p" className="insights-index-eyebrow">
+                Insights
+              </SectionLabel>
               <h1 id="insights-index-title">
                 Insights for a changing risk landscape.
               </h1>
@@ -48,7 +51,9 @@ export function InsightsIndex({ insights }: InsightsIndexProps) {
       <section className="insights-index-library" aria-labelledby="published-insights-title">
         <Container>
           <header className="insights-index-library__header">
-            <p className="eyebrow insights-index-eyebrow">EDITORIAL LIBRARY</p>
+            <SectionLabel align="center" as="p" className="insights-index-eyebrow">
+              Editorial Library
+            </SectionLabel>
             <h2 id="published-insights-title">
               {hasPublishedInsights
                 ? "Reviewed analysis, published with intent."

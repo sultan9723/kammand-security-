@@ -1,17 +1,22 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import { SectionLabel } from "./section-label";
 
 type SectionHeadingProps = HTMLAttributes<HTMLDivElement> & {
+  align?: "start" | "center";
   description?: ReactNode;
   eyebrow?: ReactNode;
+  labelVariant?: "light" | "dark";
   level?: 1 | 2 | 3;
   title: ReactNode;
   titleId?: string;
 };
 
 export function SectionHeading({
+  align = "center",
   className = "",
   description,
   eyebrow,
+  labelVariant = "light",
   level = 2,
   title,
   titleId,
@@ -22,7 +27,11 @@ export function SectionHeading({
 
   return (
     <div className={classes} {...props}>
-      {eyebrow ? <p className="ui-section-heading__eyebrow">{eyebrow}</p> : null}
+      {eyebrow ? (
+        <SectionLabel align={align} as="p" variant={labelVariant}>
+          {eyebrow}
+        </SectionLabel>
+      ) : null}
       <Heading className="ui-section-heading__title" id={titleId}>
         {title}
       </Heading>

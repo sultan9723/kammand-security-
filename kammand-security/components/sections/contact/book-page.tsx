@@ -4,6 +4,7 @@ import { CalendlyConsentEmbed } from "../../consent/calendly-consent-embed";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 
 const conversationSteps = [
   { title: "Share your context", description: "We start by understanding your organization, challenges, and priorities." },
@@ -74,9 +75,8 @@ export function BookPage() {
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Book", href: "/book" }]} />
           <div className="book-overview__hero-grid">
             <div className="book-overview__hero-content">
-              <p className="eyebrow">BOOK A CONSULTATION</p>
+              <SectionLabel as="p">Book a Consultation</SectionLabel>
               <h1 id="book-title">Let&apos;s turn your priorities into clear next steps<span>.</span></h1>
-              <span className="book-overview__short-rule" aria-hidden="true" />
               <p className="text-body-large">A focused 30-minute conversation with a KAMMAND advisor helps you understand your risks, explore options, and identify what will have the most impact.</p>
               <div className="book-overview__hero-actions" aria-label="Booking page actions">
                 <Link className="ui-button ui-button--primary" href="#scheduling">Book a Consultation <DirectionalArrow /></Link>
@@ -91,7 +91,9 @@ export function BookPage() {
       <section className="book-overview__expectations" aria-labelledby="booking-expectations-title">
         <Container className="container-wide">
           <div className="book-overview__section-header">
-            <p className="eyebrow">WHAT TO EXPECT</p>
+            <SectionLabel align="center" as="p">
+              What to Expect
+            </SectionLabel>
             <h2 id="booking-expectations-title">One meeting. Real clarity.</h2>
           </div>
           <ul>
@@ -110,9 +112,8 @@ export function BookPage() {
         <Container className="container-wide">
           <div className="book-overview__scheduling-panel">
             <aside className="book-overview__meeting-details">
-              <p className="eyebrow">SCHEDULING</p>
+              <SectionLabel as="p">Scheduling</SectionLabel>
               <h2 id="booking-area-title">Choose a time that works for you.</h2>
-              <span className="book-overview__short-rule" aria-hidden="true" />
               <ul>
                 {meetingDetails.map((item) => (
                   <li key={item.title}>

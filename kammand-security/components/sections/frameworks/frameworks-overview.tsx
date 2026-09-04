@@ -3,6 +3,7 @@ import { frameworkSummaries } from "../../../lib/frameworks";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 
 const frameworkOrder = [1, 0, 3, 2] as const;
 
@@ -54,7 +55,7 @@ function FrameworkMap() {
     <div className="frameworks-overview__map" id="framework-map" aria-label="Framework reference links">
       <div className="frameworks-overview__map-grid" aria-hidden="true" />
       <div className="frameworks-overview__map-lines" aria-hidden="true"><span /><span /><span /><span /></div>
-      <div className="frameworks-overview__map-core" aria-hidden="true"><i /><i /><i /></div>
+      <div className="frameworks-overview__map-core" aria-hidden="true"><span /><span /><span /></div>
       <div className="frameworks-overview__map-cards">
         {frameworkOrder.map((frameworkIndex, position) => {
           const framework = frameworkSummaries[frameworkIndex];
@@ -62,7 +63,7 @@ function FrameworkMap() {
             <Link className={`frameworks-overview__map-card frameworks-overview__map-card--${position + 1}`} href={framework.href} key={framework.href}>
               <span className={`frameworks-overview__map-icon frameworks-overview__map-icon--${frameworkIndex}`}><FrameworkIcon name={frameworkIcon(frameworkIndex)} /></span>
               <strong>{framework.title}</strong>
-              <span className="frameworks-overview__map-fields" aria-hidden="true"><i /><i /><i /></span>
+              <span className="frameworks-overview__map-fields" aria-hidden="true"><span /><span /><span /></span>
               <span className="frameworks-overview__map-check" aria-hidden="true">✓</span>
             </Link>
           );
@@ -80,7 +81,7 @@ export function FrameworksOverviewPage() {
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Frameworks", href: "/frameworks" }]} />
           <div className="frameworks-overview__hero-grid">
             <div className="frameworks-overview__hero-content">
-              <p className="eyebrow">FRAMEWORKS</p>
+              <SectionLabel as="p">Frameworks</SectionLabel>
               <h1 id="frameworks-overview-title" aria-label="Navigate complex frameworks with greater clarity."><span>Navigate complex </span><span>frameworks with </span><span>greater clarity.</span></h1>
               <p className="text-body-large">Use this page to understand how requirements overlap, where evidence can be reused, and why official mappings still depend on scope.</p>
               <div className="frameworks-overview__hero-actions" aria-label="Framework overview actions">
@@ -97,7 +98,7 @@ export function FrameworksOverviewPage() {
         <Container className="container-wide">
           <div className="frameworks-overview__reality-panel">
             <div className="frameworks-overview__reality-intro">
-              <p className="eyebrow">THE REALITY</p>
+              <SectionLabel as="p">The Reality</SectionLabel>
               <h2 id="framework-reality-title">Many frameworks.<br />One challenge.</h2>
               <p>Organizations face growing pressure to meet multiple frameworks and regulations. The hard part is not collecting documents; it is understanding what applies, what overlaps, and what must be proven.</p>
             </div>
@@ -118,7 +119,9 @@ export function FrameworksOverviewPage() {
       <section className="frameworks-overview__approach" id="framework-approach" aria-labelledby="framework-approach-title">
         <Container className="container-wide">
           <div className="frameworks-overview__section-header">
-            <p className="eyebrow">OUR APPROACH</p>
+            <SectionLabel align="center" as="p">
+              Our Approach
+            </SectionLabel>
             <h2 id="framework-approach-title">Clarity through structure.</h2>
             <p>We help organizations translate complex framework requirements into practical structures that support ownership, evidence, and assurance.</p>
           </div>

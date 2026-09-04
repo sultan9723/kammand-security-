@@ -25,7 +25,7 @@ describe("GrcAdvisoryPage", () => {
     expect(screen.getByRole("link", { name: "Services" }).getAttribute("href")).toBe(
       "/services",
     );
-    expect(screen.getByText("GRC Advisory")).toBeTruthy();
+    expect(screen.getAllByText("GRC Advisory").length).toBeGreaterThan(0);
   });
 
   it("renders the service-detail template sections and internal links", () => {

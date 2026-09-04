@@ -3,6 +3,7 @@ import { ContactForm } from "./contact-form";
 import { Breadcrumbs } from "../../ui/breadcrumbs";
 import { Container } from "../../ui/container";
 import { DirectionalArrow } from "../../ui/directional-arrow";
+import { SectionLabel } from "../../ui/section-label";
 import { FinalCtaSection } from "../homepage/final-cta";
 
 const nextSteps = [
@@ -39,7 +40,7 @@ export function ContactPage() {
           />
           <div className="contact-hero__grid">
             <div className="contact-hero__content">
-              <p className="eyebrow">CONTACT</p>
+              <SectionLabel as="p">Contact</SectionLabel>
               <h1 id="contact-title">Let&apos;s talk about what your organization needs.</h1>
               <p className="text-body-large">
                 Tell us about your GRC, cybersecurity, risk, compliance, or
@@ -80,7 +81,9 @@ export function ContactPage() {
       <section className="contact-inquiry" id="contact-inquiry" aria-labelledby="contact-form-title">
         <Container className="container-wide">
           <header className="contact-section-heading">
-            <p className="eyebrow">INQUIRY FORM</p>
+            <SectionLabel align="center" as="p">
+              Inquiry Form
+            </SectionLabel>
             <h2 id="contact-form-title">Send a focused inquiry.</h2>
             <p>
               Use the form for service, framework, risk, compliance, or assurance
@@ -113,7 +116,9 @@ export function ContactPage() {
       <section className="contact-next" aria-labelledby="next-steps-title">
         <Container>
           <header className="contact-section-heading">
-            <p className="eyebrow">WHAT HAPPENS NEXT</p>
+            <SectionLabel align="center" as="p">
+              What Happens Next
+            </SectionLabel>
             <h2 id="next-steps-title">Clear context helps define the next step.</h2>
           </header>
           <ol className="contact-next__steps">

@@ -10,6 +10,7 @@ import { TrustStrip } from "../components/sections/homepage/trust-strip";
 import { WhyKammandSection } from "../components/sections/homepage/why-kammand";
 import { ProcessSection } from "../components/sections/homepage/process";
 import { ServicesSection } from "../components/sections/homepage/services";
+import { ServicesOverviewHeroSection } from "../components/sections/services/services-overview";
 import { getAbsoluteUrl, getOrganizationJsonLd, siteConfig } from "../lib/site";
 
 const canonicalUrl = getAbsoluteUrl("/");
@@ -40,6 +41,11 @@ export default function Home() {
       />
       <HomepageHero />
       <TrustStrip />
+      <ServicesOverviewHeroSection
+        capabilitiesHref="#homepage-capabilities"
+        headingLevel="h2"
+        titleId="homepage-services-overview-title"
+      />
       <ServicesSection />
       <FrameworkIntelligence />
       <IndustriesSection />
